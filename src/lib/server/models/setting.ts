@@ -24,7 +24,10 @@ Setting.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		key: DataTypes.STRING,
+		key: {
+			type: DataTypes.STRING,
+			unique: true,
+		},
 		value: DataTypes.STRING,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
