@@ -1,5 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { Question } from "$lib/server/models/question";
+import { PairQuestion } from "$lib/server/models/pairquestion";
 
 interface inQuestion {
 	question: string;
@@ -11,11 +12,16 @@ export const load: PageServerLoad = async () => {
 	console.log(await Question.findAll({ attributes: ["id", "question", "teacherQuestion"] }));
 
 	return {
-		questions: (await Question.findAll({ attributes: ["id", "question", "teacherQuestion"] })).map(
-			(question) => {
-				return question.dataValues;
-			},
-		),
+		simplequestions: (
+			await Question.findAll({ attributes: ["id", "question", "teacherQuestion"] })
+		).map((question) => {
+			return question.dataValues;
+		}),
+		pairquestions: (
+			await PairQuestion.findAll({ attributes: ["id", "question", "teacherQuestion"] })
+		).map((question) => {
+			return question.dataValues;
+		}),
 	};
 };
 

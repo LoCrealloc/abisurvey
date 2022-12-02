@@ -1,20 +1,47 @@
 <script lang="ts">
+	interface EditorQuestion {
+		id?: number;
+		question: string;
+		teacherQuestion: boolean;
+		pairQuestion: boolean;
+	}
+
 	export let data;
 
-	let questions = data.questions;
+	let questions: Array<EditorQuestion> = data.simplequestions.map((question) => {
+		return {
+			id: question.id,
+			question: question.question,
+			teacherQuestion: question.teacherQuestion,
+			pairQuestion: false,
+		};
+	});
+
+	questions.concat(
+		data.pairquestions.map((question) => {
+			return {
+				id: question.id,
+				question: question.question,
+				teacherQuestion: question.teacherQuestion,
+				pairQuestion: true,
+			};
+		}),
+	);
 
 	let new_question_question = "";
 	let new_question_teacherQuestion = false;
+	let new_question_pairQuestion = false;
 
 	$: new_question = {
 		question: new_question_question,
 		teacherQuestion: new_question_teacherQuestion,
+		pairQuestion: new_question_pairQuestion,
 	};
 
 	function add_question() {
 		questions.push(new_question);
 		new_question_question = "";
-		new_question_teacherQuestion = false;
+		new_question_teacherQuestion = new_question_pairQuestion = false;
 		questions = [...questions];
 	}
 
@@ -34,13 +61,24 @@
 				<div
 					class="my-2 grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
 				>
-					<div class="col-span-3">
+					<div class="col-span-2">
 						<input
 							bind:value={question.question}
 							class="w-full rounded-lg p-3 text-black"
 							type="text"
 							placeholder="Neue Frage.."
 							name="question"
+						/>
+					</div>
+					<div class="place-self-center p-3">
+						<label class="mr-2" for={`pairquestion-${i}`}>Paarfrage</label>
+						<input
+							bind:checked={question.pairQuestion}
+							bind:value={question.pairQuestion}
+							class="scale-150"
+							id={`pairquestion-${i}`}
+							type="checkbox"
+							name="pairQuestion"
 						/>
 					</div>
 					<div class="place-self-center p-3">
@@ -78,12 +116,20 @@
 	<div
 		class="grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
 	>
-		<div class="col-span-3">
+		<div class="col-span-2">
 			<input
 				bind:value={new_question_question}
 				class="w-full rounded-lg p-3 text-black"
 				type="text"
 				placeholder="Neue Frage.."
+			/>
+		</div>
+		<div class="place-self-center p-3">
+			<label class="mr-2" for="pairquestion">Paarfrage</label><input
+				bind:checked={new_question_pairQuestion}
+				class="scale-150"
+				id="pairquestion"
+				type="checkbox"
 			/>
 		</div>
 		<div class="place-self-center p-3">
