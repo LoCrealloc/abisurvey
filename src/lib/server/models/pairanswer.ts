@@ -6,8 +6,8 @@ import type {
 	ForeignKey,
 } from "sequelize";
 import { db } from "../database";
+import type { Question } from "./question";
 import type { AnswerPossibility } from "./answerpossibility";
-import type { PairQuestion } from "./pairquestion";
 import type { User } from "./user";
 
 /*
@@ -22,7 +22,7 @@ export class PairAnswer extends Model<
 > {
 	declare id: CreationOptional<number>;
 	declare userId: ForeignKey<User["id"]>;
-	declare pairquestionId: ForeignKey<PairQuestion["id"]>;
+	declare questionId: ForeignKey<Question["id"]>;
 	declare answerOneId: ForeignKey<AnswerPossibility["id"]>;
 	declare answerTwoId: ForeignKey<AnswerPossibility["id"]>;
 	declare createdAt: CreationOptional<Date>;
