@@ -24,6 +24,15 @@ import type { Actions } from "./$types";
 
 export const actions: Actions = {
 	default: async ({ request }) => {
+		// fetch question ids to check what needs to be deleted later
+		const question_ids = (
+			await Question.findAll({
+				attributes: ["id"],
+			})
+		).map((question) => {
+			return question.dataValues.id;
+		});
+
 		const data = await request.formData();
 
 		console.log(data);
@@ -85,14 +94,6 @@ export const actions: Actions = {
 
 			await Question.update(question, { where: { id: question.id } });
 		}
-
-		const question_ids = (
-			await Question.findAll({
-				attributes: ["id"],
-			})
-		).map((question) => {
-			return question.dataValues.id;
-		});
 
 		const removables: Array<number> = [];
 
