@@ -1,47 +1,39 @@
 <script lang="ts">
-	interface EditorQuestion {
-		id?: number;
-		question: string;
-		teacherQuestion: boolean;
-		pairQuestion: boolean;
-	}
+	import { onMount } from "svelte";
 
 	export let data;
 
-	let questions: Array<EditorQuestion> = data.simplequestions.map((question) => {
-		return {
-			id: question.id,
-			question: question.question,
-			teacherQuestion: question.teacherQuestion,
-			pairQuestion: false,
-		};
-	});
+	let questions = [];
 
-	questions.concat(
-		data.pairquestions.map((question) => {
-			return {
-				id: question.id,
-				question: question.question,
-				teacherQuestion: question.teacherQuestion,
-				pairQuestion: true,
-			};
-		}),
-	);
+	onMount(() => {
+		questions = data.questions
+			.map((question) => {
+				return {
+					id: question.id,
+					question: question.question,
+					teacherQuestion: question.teacherQuestion,
+					pair: question.pair,
+				};
+			})
+			.sort((a) => {
+				return a.teacherQuestion;
+			});
+	});
 
 	let new_question_question = "";
 	let new_question_teacherQuestion = false;
-	let new_question_pairQuestion = false;
+	let new_question_pair = false;
 
 	$: new_question = {
 		question: new_question_question,
 		teacherQuestion: new_question_teacherQuestion,
-		pairQuestion: new_question_pairQuestion,
+		pair: new_question_pair,
 	};
 
 	function add_question() {
 		questions.push(new_question);
 		new_question_question = "";
-		new_question_teacherQuestion = new_question_pairQuestion = false;
+		new_question_teacherQuestion = new_question_pair = false;
 		questions = [...questions];
 	}
 
@@ -63,7 +55,10 @@
 				>
 					<div class="col-span-2">
 						<input
-							bind:value={question.question}
+							on:input|preventDefault={(event) => {
+								question.question = event.target.value;
+							}}
+							value={question.question}
 							class="w-full rounded-lg p-3 text-black"
 							type="text"
 							placeholder="Neue Frage.."
@@ -71,21 +66,27 @@
 						/>
 					</div>
 					<div class="place-self-center p-3">
-						<label class="mr-2" for={`pairquestion-${i}`}>Paarfrage</label>
+						<label class="mr-2" for={`pair-${i}`}>Paarfrage</label>
 						<input
-							bind:checked={question.pairQuestion}
-							bind:value={question.pairQuestion}
+							on:input|preventDefault={() => {
+								question.pair = !question.pair;
+							}}
+							checked={question.pair}
+							value={question.pair}
 							class="scale-150"
-							id={`pairquestion-${i}`}
+							id={`pair-${i}`}
 							type="checkbox"
-							name="pairQuestion"
+							name="pair"
 						/>
 					</div>
 					<div class="place-self-center p-3">
 						<label class="mr-2" for={`teacherquestion-${i}`}>Lehrer-Frage</label>
 						<input
-							bind:checked={question.teacherQuestion}
-							bind:value={question.teacherQuestion}
+							on:input|preventDefault={() => {
+								question.teacherQuestion = !question.teacherQuestion;
+							}}
+							checked={question.teacherQuestion}
+							value={question.teacherQuestion}
 							class="scale-150"
 							id={`teacherquestion-${i}`}
 							type="checkbox"
@@ -125,10 +126,10 @@
 			/>
 		</div>
 		<div class="place-self-center p-3">
-			<label class="mr-2" for="pairquestion">Paarfrage</label><input
-				bind:checked={new_question_pairQuestion}
+			<label class="mr-2" for="pair">Paarfrage</label><input
+				bind:checked={new_question_pair}
 				class="scale-150"
-				id="pairquestion"
+				id="pair"
 				type="checkbox"
 			/>
 		</div>

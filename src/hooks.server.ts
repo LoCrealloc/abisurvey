@@ -7,7 +7,6 @@ import { Answer } from "./lib/server/models/answer";
 import { AnswerPossibility } from "./lib/server/models/answerpossibility";
 import { Code } from "./lib/server/models/code";
 import { PairAnswer } from "./lib/server/models/pairanswer";
-import { PairQuestion } from "./lib/server/models/pairquestion";
 import { Question } from "./lib/server/models/question";
 import { User } from "./lib/server/models/user";
 

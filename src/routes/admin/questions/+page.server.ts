@@ -1,24 +1,19 @@
 import type { PageServerLoad } from "./$types";
 import { Question } from "$lib/server/models/question";
-import { PairQuestion } from "$lib/server/models/pairquestion";
 
 interface inQuestion {
 	question: string;
 	teacherQuestion: boolean;
 	id?: number;
+	pair: boolean;
 }
 
 export const load: PageServerLoad = async () => {
-	console.log(await Question.findAll({ attributes: ["id", "question", "teacherQuestion"] }));
-
 	return {
-		simplequestions: (
-			await Question.findAll({ attributes: ["id", "question", "teacherQuestion"] })
-		).map((question) => {
-			return question.dataValues;
-		}),
-		pairquestions: (
-			await PairQuestion.findAll({ attributes: ["id", "question", "teacherQuestion"] })
+		questions: (
+			await Question.findAll({
+				attributes: ["id", "question", "teacherQuestion", "pair"],
+			})
 		).map((question) => {
 			return question.dataValues;
 		}),
@@ -30,10 +25,14 @@ import type { Actions } from "./$types";
 export const actions: Actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();
+
+		console.log(data);
+
 		const result = [];
 		let current: inQuestion = {
 			question: "",
 			teacherQuestion: false,
+			pair: false,
 		};
 
 		for (const pair of data.entries()) {
@@ -48,6 +47,7 @@ export const actions: Actions = {
 				current = {
 					question: "",
 					teacherQuestion: false,
+					pair: false,
 				};
 
 				current.question = value.toString();
@@ -55,6 +55,8 @@ export const actions: Actions = {
 				current.teacherQuestion = true;
 			} else if (key === "id") {
 				current.id = parseInt(value.toString());
+			} else if (key === "pair") {
+				current.pair = true;
 			}
 		}
 
@@ -65,9 +67,12 @@ export const actions: Actions = {
 		const with_id: Array<inQuestion> = [];
 		const without_id: Array<inQuestion> = [];
 
+		const in_ids: Array<number> = [];
+
 		result.forEach((question) => {
-			if (Object.hasOwn(question, "id")) {
+			if (Object.hasOwn(question, "id") && question.id != undefined) {
 				with_id.push(question);
+				in_ids.push(question.id);
 			} else {
 				without_id.push(question);
 			}
@@ -80,5 +85,23 @@ export const actions: Actions = {
 
 			await Question.update(question, { where: { id: question.id } });
 		}
+
+		const question_ids = (
+			await Question.findAll({
+				attributes: ["id"],
+			})
+		).map((question) => {
+			return question.dataValues.id;
+		});
+
+		const removables: Array<number> = [];
+
+		question_ids.forEach((number) => {
+			if (!in_ids.includes(number)) {
+				removables.push(number);
+			}
+		});
+
+		await Question.destroy({ where: { id: removables } });
 	},
 };
