@@ -1,16 +1,20 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { afterNavigate } from "$app/navigation";
 
 	export let data;
 
 	let possibilities = [];
 
-	onMount(() => {
+	function loadCallback() {
 		possibilities = data.possibilities.sort((a, b) => {
 			return a.name.localeCompare(b.name);
 		});
-		console.log(data.type);
-	});
+	}
+
+	onMount(loadCallback);
+
+	afterNavigate(loadCallback);
 
 	let new_possibility = "";
 
