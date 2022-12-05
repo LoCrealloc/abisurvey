@@ -8,6 +8,7 @@ export const load: PageServerLoad = async () => {
 		codes: (
 			await Code.findAll({
 				attributes: ["id", "code"],
+				order: [["code", "ASC"]],
 			})
 		).map((code) => {
 			return code.dataValues;
