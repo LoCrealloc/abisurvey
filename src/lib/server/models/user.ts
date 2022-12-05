@@ -48,4 +48,4 @@ User.hasOne(Code, {
 	sourceKey: "id",
 	foreignKey: "userId",
 	as: "CodeUser",
-});
+}); // Reserved for potential future use

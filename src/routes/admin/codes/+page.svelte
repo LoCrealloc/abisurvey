@@ -21,7 +21,14 @@
 				<p>Generiere</p>
 			</div>
 			<div class="col-span-1">
-				<input class="w-full rounded-lg p-3 text-black" type="number" value="0" min="0" max="200" />
+				<input
+					class="w-full rounded-lg p-3 text-black"
+					type="number"
+					value="0"
+					min="0"
+					max="200"
+					name="count"
+				/>
 			</div>
 			<div class="col-span-2">
 				<p>neue Zugangscodes (momentan: {codes.length})</p>
@@ -30,7 +37,7 @@
 				<input
 					type="submit"
 					value="Generieren"
-					class="w-full rounded-xl bg-white p-3 text-slate-900"
+					class="w-full cursor-pointer rounded-xl bg-white p-3 text-slate-900"
 				/>
 			</div>
 		</div>
@@ -38,23 +45,24 @@
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Aktuelle Codes</h2>
 	{#if codes.length > 0}
 		{#each codes as code}
-			<form method="POST" action="?/delete">
+			<form method="POST" action="?/delete" class="my-1">
 				<div
-					class="grid grid-cols-3 grid-rows-1 place-items-center rounded-xl bg-slate-500 p-5 text-white"
+					class="grid grid-cols-3 grid-rows-1 place-items-center rounded-xl bg-slate-500 p-4 text-white"
 				>
 					<div class="col-span-1">
-						<p class="w-full rounded-lg p-3 text-black">
-							{code}
+						<p class="w-full rounded-lg p-3 text-lg text-white">
+							{code.code}
 						</p>
 					</div>
 					<div class="col-span-2 w-full">
 						<input
 							type="submit"
 							value="Entfernen"
-							class="w-full rounded-xl bg-white p-3 text-slate-900"
+							class="w-full cursor-pointer rounded-xl bg-white p-3 text-slate-900 hover:bg-red-600 hover:text-white"
 						/>
 					</div>
 				</div>
+				<input type="text" hidden value={code.id} name="id" />
 			</form>
 		{/each}
 	{:else}
