@@ -19,6 +19,7 @@ export class AnswerPossibility extends Model<
 	declare id: CreationOptional<number>;
 	declare name: string;
 	declare isTeacher: boolean;
+	declare sex: string;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
@@ -32,6 +33,7 @@ AnswerPossibility.init(
 		},
 		name: DataTypes.STRING,
 		isTeacher: DataTypes.BOOLEAN,
+		sex: DataTypes.STRING,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},

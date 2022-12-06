@@ -10,6 +10,8 @@
 		possibilities = data.possibilities.sort((a, b) => {
 			return a.name.localeCompare(b.name);
 		});
+
+		console.log(possibilities);
 	}
 
 	onMount(loadCallback);
@@ -17,14 +19,19 @@
 	afterNavigate(loadCallback);
 
 	let new_possibility = "";
+	let new_possibility_sex = "";
 
 	function add_possibility() {
-		possibilities.push({ name: new_possibility });
+		possibilities.push({
+			name: new_possibility,
+			sex: new_possibility_sex,
+		});
 		possibilities = [...possibilities].sort((a, b) => {
 			return a.name.localeCompare(b.name);
 		});
 
 		new_possibility = "";
+		new_possibility_sex = "";
 	}
 
 	function remove_possibility(index: number) {
@@ -47,13 +54,26 @@
 		<div
 			class="grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
 		>
-			<div class="col-span-4">
+			<div class="col-span-2">
 				<input
 					bind:value={new_possibility}
 					class="w-full rounded-lg p-3 text-black"
 					type="text"
 					placeholder="Neue Antwortmöglichkeit.."
 				/>
+			</div>
+			<div class="col-span-2 place-self-center">
+				<label class="mr-3" for="sex_new">Geschlecht</label>
+				<select
+					bind:value={new_possibility_sex}
+					class="w-36 rounded-xl bg-white p-3 text-slate-900"
+					id="sex_new"
+					name="sex"
+					required
+				>
+					<option value="m"> Männlich </option>
+					<option value="w"> Weiblich </option>
+				</select>
 			</div>
 			<div class="place-self-center">
 				<input type="submit" value="Hinzufügen" class="rounded-xl bg-white p-3 text-slate-900" />
@@ -67,7 +87,7 @@
 				<div
 					class="my-2 grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
 				>
-					<div class="col-span-4">
+					<div class="col-span-2">
 						<input
 							on:input|preventDefault={(event) => {
 								possibility.name = event.target.value;
@@ -78,6 +98,19 @@
 							placeholder="Neue Möglichkeit.."
 							name="name"
 						/>
+					</div>
+					<div class="col-span-2 place-self-center">
+						<label class="mr-3" for={`sex-${i}`}>Geschlecht</label>
+						<select
+							value={possibility.sex}
+							class="w-36 rounded-xl bg-white p-3 text-slate-900"
+							id={`sex-${i}`}
+							name="sex"
+							required
+						>
+							<option value="m"> Männlich </option>
+							<option value="w"> Weiblich </option>
+						</select>
 					</div>
 					<div class="place-self-center">
 						<button

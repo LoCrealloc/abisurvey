@@ -5,13 +5,14 @@ interface inPossibility {
 	name: string;
 	id?: number;
 	isTeacher: boolean;
+	sex: string;
 }
 
 export const load: PageServerLoad = async ({ params }) => {
 	return {
 		possibilities: (
 			await AnswerPossibility.findAll({
-				attributes: ["id", "name"],
+				attributes: ["id", "name", "sex"],
 				where: {
 					isTeacher: params.type === "teacher",
 				},
@@ -43,6 +44,7 @@ export const actions: Actions = {
 		let current: inPossibility = {
 			name: "",
 			isTeacher: params.type === "teacher",
+			sex: "",
 		};
 
 		for (const pair of data.entries()) {
@@ -57,9 +59,12 @@ export const actions: Actions = {
 				current = {
 					name: "",
 					isTeacher: current.isTeacher,
+					sex: "",
 				};
 
 				current.name = value.toString();
+			} else if (key === "sex") {
+				current.sex = value.toString();
 			} else if (key === "id") {
 				current.id = parseInt(value.toString());
 			}
