@@ -124,7 +124,7 @@
 				</div>
 			{/each}
 		{:else}
-			<h1 class="m-8 text-center">Es sind noch keine Möglichkeiten vorhanden</h1>
+			<h1 class="m-8 text-center text-white">Es sind noch keine Möglichkeiten vorhanden.</h1>
 		{/if}
 		<input
 			class="mt-8 w-full rounded-xl bg-slate-500 p-4 text-lg text-white"

@@ -97,6 +97,6 @@
 			</form>
 		{/each}
 	{:else}
-		<h1 class="m-8 text-center">Es sind noch keine Codes vorhanden</h1>
+		<h1 class="m-8 text-center text-white">Es sind noch keine Codes vorhanden.</h1>
 	{/if}
 </div>
