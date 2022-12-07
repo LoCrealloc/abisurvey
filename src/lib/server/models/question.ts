@@ -4,14 +4,6 @@ import { db } from "../database";
 import { Answer } from "./answer";
 import { PairAnswer } from "./pairanswer";
 
-/*
-export const Question = db.define("Question", {
-	id: ID,
-	question: DataTypes.STRING,
-	teacherQuestion: DataTypes.BOOLEAN,
-});
-*/
-
 export class Question extends Model<InferAttributes<Question>, InferCreationAttributes<Question>> {
 	declare id: CreationOptional<number>;
 	declare question: string;

@@ -4,13 +4,6 @@ import { db } from "../database";
 
 import { Answer } from "./answer";
 import { PairAnswer } from "./pairanswer";
-/*
-export const AnswerPossibility = db.define("AnswerPossibility", {
-	id: ID,
-	name: DataTypes.STRING,
-	isTeacher: DataTypes.BOOLEAN,
-});
- */
 
 export class AnswerPossibility extends Model<
 	InferAttributes<AnswerPossibility>,

@@ -2,13 +2,6 @@ import { Model, DataTypes } from "sequelize";
 import type { InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import { db } from "../database";
 
-/*
-export const Setting = db.define("Settings", {
-	key: DataTypes.STRING,
-	value: DataTypes.STRING,
-});
-*/
-
 export class Setting extends Model<InferAttributes<Setting>, InferCreationAttributes<Setting>> {
 	declare id: CreationOptional<number>;
 	declare key: string;

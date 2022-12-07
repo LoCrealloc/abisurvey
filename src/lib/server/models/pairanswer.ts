@@ -10,12 +10,6 @@ import type { Question } from "./question";
 import type { AnswerPossibility } from "./answerpossibility";
 import type { User } from "./user";
 
-/*
-export const PairAnswer = db.define("PairAnswer", {
-	id: ID,
-});
- */
-
 export class PairAnswer extends Model<
 	InferAttributes<PairAnswer>,
 	InferCreationAttributes<PairAnswer>

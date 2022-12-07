@@ -9,12 +9,6 @@ import { db } from "../database";
 import type { Question } from "./question";
 import type { AnswerPossibility } from "./answerpossibility";
 
-/*
-export const Answer = db.define("Answer", {
-	id: ID,
-});
- */
-
 export class Answer extends Model<InferAttributes<Answer>, InferCreationAttributes<Answer>> {
 	declare id: CreationOptional<number>;
 	declare userId: ForeignKey<number>;

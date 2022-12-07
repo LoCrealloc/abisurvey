@@ -8,13 +8,6 @@ import type {
 import { db } from "../database";
 import type { User } from "./user";
 
-/*
-export const Code = db.define("Code", {
-	id: ID,
-	code: DataTypes.STRING,
-});
-*/
-
 export class Code extends Model<InferAttributes<Code>, InferCreationAttributes<Code>> {
 	declare id: CreationOptional<number>;
 	declare code: string;

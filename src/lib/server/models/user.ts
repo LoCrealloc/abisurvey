@@ -6,16 +6,6 @@ import { Answer } from "./answer";
 import { Code } from "./code";
 import { PairAnswer } from "./pairanswer";
 
-/*
-export const User = db.define("User", {
-	id: ID,
-	name: {
-		type: DataTypes.STRING,
-		unique: true,
-	},
-});
- */
-
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 	declare id: CreationOptional<number>;
 	declare name: string;
