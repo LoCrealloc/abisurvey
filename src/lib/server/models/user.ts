@@ -8,7 +8,8 @@ import { PairAnswer } from "./pairanswer";
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 	declare id: CreationOptional<number>;
-	declare name: string;
+	declare name?: string;
+	declare mail: string;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
@@ -20,7 +21,11 @@ User.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		name: DataTypes.STRING,
+		name: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		mail: DataTypes.STRING,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},

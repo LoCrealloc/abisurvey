@@ -1,5 +1,5 @@
 import type { Handle } from "@sveltejs/kit";
-import { verify_logged_in, hash_password } from "$lib/server/handleAuth";
+import { verify_logged_in, hash_password, verify_token_user } from "$lib/server/handleAuth";
 import { db } from "$lib/server/database";
 
 // import to load the models for db sync
@@ -46,10 +46,27 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (event.url.pathname.startsWith("/admin")) {
 		const token = event.cookies.get("token");
 		if (!(await verify_logged_in(token))) {
-			redirect("Not logged in", "/admin/login");
+			return redirect("Not logged in", "/login_admin");
 		}
 
-		event.locals.loggedIn = true;
+		event.locals.loggedInAdmin = true;
+	} else {
+		const isLoginRoute =
+			event.url.pathname.startsWith("/login") || event.url.pathname.startsWith("/register");
+
+		const token = event.cookies.get("usersession");
+		let userId;
+
+		try {
+			userId = await verify_token_user(token);
+		} catch {
+			return !isLoginRoute ? redirect("not logged in", "/login") : resolve(event);
+		}
+		if ((await User.findOne({ where: { id: userId } })) === null) {
+			return !isLoginRoute ? redirect("no user", "/login") : resolve(event);
+		}
+
+		event.locals.userId = userId;
 	}
 
 	return resolve(event);

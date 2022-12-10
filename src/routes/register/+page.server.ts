@@ -2,11 +2,11 @@ import type { Actions } from "@sveltejs/kit";
 
 import { Code } from "$lib/server/models/code";
 import { User } from "$lib/server/models/user";
+import { error, redirect } from "@sveltejs/kit";
 import { SignJWT } from "jose";
 import { dev } from "$app/environment";
 
 import { SECRET } from "$env/static/private";
-import { error, redirect } from "@sveltejs/kit";
 
 const jwt_alg = "HS256";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -24,23 +24,26 @@ export const actions: Actions = {
 			throw error(404, "incomplete request");
 		}
 
-		const codeModel = await Code.findOne({
-			attributes: ["userId"],
-			where: { code: code.toString() },
-		});
-
-		const user = await User.findOne({
-			attributes: ["mail", "id"],
-			where: { mail: email.toString() },
-		});
+		const codeModel = await Code.findOne({ where: { code: code.toString() } });
 
 		if (codeModel === null) {
 			throw error(401, "wrong code");
 		}
 
-		if (user === null || user.dataValues.id != codeModel.userId) {
-			throw error(401, "wrong code");
-		}
+		const newUser = {
+			mail: email.toString(),
+		};
+
+		const user = await User.create(newUser);
+
+		console.log(user.dataValues.id);
+
+		await Code.update(
+			{
+				userId: user.dataValues.id,
+			},
+			{ where: { id: codeModel.dataValues.id } },
+		);
 
 		const jwt = await new SignJWT({ userId: user.dataValues.id })
 			.setProtectedHeader({ alg: jwt_alg })
