@@ -1,24 +1,45 @@
 import type { PageServerLoad, Actions } from "./$types";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
+import { Person } from "$lib/server/models/person";
 
 interface inPossibility {
-	name: string;
 	id?: number;
 	isTeacher: boolean;
-	sex: string;
+	personId: number | null;
+}
+
+interface inPerson {
+	id?: number;
+	forename: string;
+	surname: string;
 }
 
 export const load: PageServerLoad = async ({ params }) => {
+	console.log(params.type);
+
+	const data = (
+		await AnswerPossibility.findAll({
+			include: Person,
+			attributes: ["id", "isTeacher", "personId", "Person.forename", "Person.surname"],
+			where: {
+				isTeacher: params.type === "teacher",
+			},
+		})
+	).map((value) => {
+		return value.dataValues;
+	});
+
 	return {
-		possibilities: (
-			await AnswerPossibility.findAll({
-				attributes: ["id", "name", "sex"],
-				where: {
-					isTeacher: params.type === "teacher",
-				},
-			})
-		).map((question) => {
-			return question.dataValues;
+		possibilities: data.map((row) => {
+			return {
+				id: row.id,
+				isTeacher: row.isTeacher,
+				personId: row.personId,
+				// @ts-ignore
+				forename: row.Person.forename,
+				// @ts-ignore
+				surname: row.Person.surname,
+			};
 		}),
 		type: params.type,
 	};
@@ -40,66 +61,80 @@ export const actions: Actions = {
 
 		const data = await request.formData();
 
-		const result = [];
-		let current: inPossibility = {
-			name: "",
+		const processed: Array<number> = [];
+		let current_possibility: inPossibility = {
+			id: undefined,
+			personId: null,
 			isTeacher: params.type === "teacher",
-			sex: "",
 		};
+
+		let current_person: inPerson = {
+			id: undefined,
+			forename: "",
+			surname: "",
+		};
+
+		async function processEntry() {
+			if (current_person.forename !== "") {
+				let person;
+				if (current_person.id === undefined) {
+					person = await Person.create(current_person);
+				} else {
+					await Person.update(current_person, { where: { id: current_person.id } });
+					person = current_person;
+				}
+
+				// @ts-ignore
+				current_possibility.personId = person.id;
+
+				if (current_possibility.id === undefined) {
+					await AnswerPossibility.create(current_possibility);
+				} else {
+					await AnswerPossibility.update(current_possibility, {
+						where: {
+							id: current_possibility.id,
+						},
+					});
+					processed.push(current_possibility.id);
+				}
+			}
+		}
 
 		for (const pair of data.entries()) {
 			const key = pair[0];
 			const value = pair[1];
 
-			if (key === "name") {
-				if (current.name !== "") {
-					result.push(current);
-				}
+			if (key === "forename") {
+				await processEntry();
 
-				current = {
-					name: "",
-					isTeacher: current.isTeacher,
-					sex: "",
+				current_person = {
+					id: undefined,
+					forename: "",
+					surname: "",
 				};
 
-				current.name = value.toString();
-			} else if (key === "sex") {
-				current.sex = value.toString();
+				current_possibility = {
+					id: undefined,
+					personId: null,
+					isTeacher: params.type === "teacher",
+				};
+
+				current_person.forename = value.toString();
 			} else if (key === "id") {
-				current.id = parseInt(value.toString());
+				current_possibility.id = parseInt(value.toString());
+			} else if (key === "personId") {
+				current_person.id = parseInt(value.toString());
+			} else if (key === "surname") {
+				current_person.surname = value.toString();
 			}
 		}
 
-		if (current.name !== "") {
-			result.push(current);
-		}
-
-		const with_id: Array<inPossibility> = [];
-		const without_id: Array<inPossibility> = [];
-
-		const in_ids: Array<number> = [];
-
-		result.forEach((possibility) => {
-			if (Object.hasOwn(possibility, "id") && possibility.id != undefined) {
-				with_id.push(possibility);
-				in_ids.push(possibility.id);
-			} else {
-				without_id.push(possibility);
-			}
-		});
-
-		await AnswerPossibility.bulkCreate(without_id);
-
-		for (let i = 0; i < with_id.length; i++) {
-			const possibility = with_id[i];
-
-			await AnswerPossibility.update(possibility, { where: { id: possibility.id } });
-		}
+		await processEntry();
 
 		const removables: Array<number> = [];
 
 		possibility_ids.forEach((number) => {
-			if (!in_ids.includes(number)) {
+			if (!processed.includes(number)) {
 				removables.push(number);
 			}
 		});
