@@ -44,7 +44,7 @@
 				</div>
 			{/if}
 		</div>
-		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/codes">Codes</a>
+		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/users">Users</a>
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/logout">Logout</a>
 	</nav>
 	<slot />

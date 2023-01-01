@@ -5,10 +5,11 @@ import { db } from "$lib/server/database";
 // import to load the models for db sync
 import { Answer } from "./lib/server/models/answer";
 import { AnswerPossibility } from "./lib/server/models/answerpossibility";
-import { Code } from "./lib/server/models/code";
 import { PairAnswer } from "./lib/server/models/pairanswer";
 import { Question } from "./lib/server/models/question";
 import { User } from "./lib/server/models/user";
+import { Person } from "./lib/server/models/person";
+import { X } from "./lib/server/models/associations";
 
 import { Setting } from "$lib/server/models/setting";
 import { DEFAULT_ADMIN_PASSWORD } from "$env/static/private";
