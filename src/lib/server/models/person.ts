@@ -2,30 +2,29 @@ import { Model, DataTypes } from "sequelize";
 import type { InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import { db } from "../database";
 
-export class Question extends Model<InferAttributes<Question>, InferCreationAttributes<Question>> {
+export class Person extends Model<InferAttributes<Person>, InferCreationAttributes<Person>> {
 	declare id: CreationOptional<number>;
-	declare question: string;
-	declare pair: boolean;
-	declare teacherQuestion: boolean;
+	declare forename: string;
+	declare surname: string;
+
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
 
-Question.init(
+Person.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		question: DataTypes.STRING,
-		pair: DataTypes.BOOLEAN,
-		teacherQuestion: DataTypes.BOOLEAN,
+		forename: DataTypes.STRING,
+		surname: DataTypes.STRING,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},
 	{
 		sequelize: db,
-		tableName: "questions",
+		tableName: "persons",
 	},
 );

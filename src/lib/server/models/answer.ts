@@ -13,7 +13,7 @@ export class Answer extends Model<InferAttributes<Answer>, InferCreationAttribut
 	declare id: CreationOptional<number>;
 	declare userId: ForeignKey<number>;
 	declare questionId: ForeignKey<Question["id"]>;
-	declare answerpossibilityId: ForeignKey<AnswerPossibility["id"]>;
+	declare answerPossibilityId: ForeignKey<AnswerPossibility["id"]>;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
