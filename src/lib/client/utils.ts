@@ -1,3 +1,5 @@
+import type { gender } from "$lib/common_types";
+
 export function downloadText(text: string, name: string) {
 	/*
 	 *  This is probably a shitty solution,
@@ -16,4 +18,8 @@ export function downloadText(text: string, name: string) {
 	a.click();
 	document.body.removeChild(a);
 	URL.revokeObjectURL(link);
+}
+
+export function validateGender(maybeGender: string): maybeGender is gender {
+	return ["m", "w", "d"].includes(maybeGender);
 }

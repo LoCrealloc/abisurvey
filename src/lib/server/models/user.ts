@@ -7,11 +7,12 @@ import type {
 } from "sequelize";
 import { db } from "../database";
 
+import type { gender } from "$lib/common_types";
 import type { Person } from "./person";
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 	declare id: CreationOptional<number>;
-	declare gender?: "m" | "w" | "d";
+	declare gender?: gender;
 	declare mail?: string;
 	declare code: string;
 	declare personId: ForeignKey<Person["id"]> | null;

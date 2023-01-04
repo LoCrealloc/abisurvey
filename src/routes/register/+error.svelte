@@ -1,5 +1,7 @@
 <script>
 	import { page } from "$app/stores";
+
+	console.log(page.status);
 </script>
 
 <div class="py-8 text-center dark:text-white">
@@ -7,10 +9,12 @@
 		<div><h1 class="text-5xl text-red-500">Fehler!</h1></div>
 		<div>
 			<h2 class="text-lg">
-				{#if page.status === 404}
+				{#if $page.status === 404}
 					Die Daten, die du uns übermittelt hast, sind fehlerhaft
-				{:else if page.status === 401}
+				{:else if $page.status === 401}
 					Ungültiger Code!
+				{:else if $page.status === 409}
+					Du hast dich bereits registriert - bitte logge dich ein!
 				{:else}
 					Du hast was falsch gemacht!
 				{/if}

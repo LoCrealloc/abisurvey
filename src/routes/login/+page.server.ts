@@ -1,6 +1,5 @@
 import type { Actions } from "@sveltejs/kit";
 
-import { Code } from "$lib/server/models/code";
 import { User } from "$lib/server/models/user";
 import { SignJWT } from "jose";
 import { dev } from "$app/environment";
@@ -24,21 +23,12 @@ export const actions: Actions = {
 			throw error(404, "incomplete request");
 		}
 
-		const codeModel = await Code.findOne({
-			attributes: ["userId"],
-			where: { code: code.toString() },
-		});
-
 		const user = await User.findOne({
-			attributes: ["mail", "id"],
+			attributes: ["mail", "id", "code"],
 			where: { mail: email.toString() },
 		});
 
-		if (codeModel === null) {
-			throw error(401, "wrong code");
-		}
-
-		if (user === null || user.dataValues.id != codeModel.userId) {
+		if (user === null || user.dataValues.code !== code) {
 			throw error(401, "wrong code");
 		}
 
