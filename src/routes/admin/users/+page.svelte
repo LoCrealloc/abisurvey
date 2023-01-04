@@ -34,7 +34,7 @@
 		{#if users.length > 0}
 			{#each users as user, i}
 				<div
-					class="my-2 grid grid-cols-9 grid-rows-1 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white"
+					class="my-2 grid grid-cols-10 grid-rows-1 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white"
 				>
 					<div class="col-span-1">
 						<input
@@ -73,7 +73,7 @@
 							<option value="d"> Divers </option>
 						</select>
 					</div>
-					<div class="col-span-1">
+					<div class="col-span-2">
 						<input
 							on:click|preventDefault={async () => {
 								await navigator.clipboard.writeText(user.mail);
@@ -87,7 +87,7 @@
 							readonly
 						/>
 					</div>
-					<div class="col-span-2 place-self-center">
+					<div class="col-span-2">
 						<input
 							on:click|preventDefault={() => {
 								if (
@@ -99,7 +99,7 @@
 								}
 							}}
 							value={user.code}
-							class="rounded-lg p-3 text-black hover:cursor-pointer hover:bg-red-600"
+							class="w-36 rounded-lg p-3 text-black hover:cursor-pointer hover:bg-red-600"
 							type="text"
 							name="code"
 							required
