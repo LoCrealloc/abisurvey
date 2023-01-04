@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { downloadText } from "$lib/client/utils";
 
 	export let data;
 
@@ -30,7 +31,7 @@
 		>
 	</form>
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Aktuelle User</h2>
-	<form class="my-5" method="POST" action="?/users">
+	<form class="mt-5" method="POST" action="?/users">
 		{#if users.length > 0}
 			{#each users as user, i}
 				<div
@@ -154,4 +155,20 @@
 			value="User aktualisieren"
 		/>
 	</form>
+	<button
+		class="mt-2 w-full rounded-xl bg-slate-500 p-4 text-lg text-white hover:cursor-pointer"
+		type="submit"
+		on:click={() => {
+			downloadText(
+				JSON.stringify(
+					users.map((user) => {
+						return { name: `${user.forename} ${user.surname}`, code: user.code };
+					}),
+				),
+				"users.txt",
+			);
+		}}
+	>
+		User exportieren
+	</button>
 </div>
