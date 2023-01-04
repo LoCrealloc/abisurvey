@@ -10,8 +10,8 @@ export async function verify_logged_in(token: string | undefined): Promise<boole
 	if (token === undefined) {
 		return false;
 	}
-	const { payload, protectedHeader } = await jwtVerify(token, secret).catch((_) => {
-		return { payload: null, protectedHeader: null };
+	const { payload } = await jwtVerify(token, secret).catch(() => {
+		return { payload: null };
 	});
 
 	if (payload === null || payload.loggedIn === undefined) {
@@ -21,6 +21,24 @@ export async function verify_logged_in(token: string | undefined): Promise<boole
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	return payload.loggedIn;
+}
+
+export async function verify_token_user(token: string | undefined): Promise<number> {
+	if (token === undefined) {
+		throw "undefined";
+	}
+
+	const { payload } = await jwtVerify(token, secret).catch(() => {
+		return { payload: null };
+	});
+
+	if (payload === null || payload.userId === undefined) {
+		throw "not logged in";
+	}
+
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	return parseInt(payload.userId.toString());
 }
 
 export async function hash_password(password: string): Promise<string> {

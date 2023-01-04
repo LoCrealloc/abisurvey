@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { isLoggedIn } from "$lib/client/stores/auth";
+	import { isLoggedInAdmin } from "$lib/client/stores/auth";
 	export let data;
 
-	$: isLoggedIn.set(data.loggedIn);
+	$: isLoggedInAdmin.set(data.loggedInAdmin);
 
 	let show_dropdown = false;
 </script>
 
-{#if data.loggedIn}
+{#if data.loggedInAdmin}
 	<nav class="flex w-full items-center justify-start bg-slate-800 p-9 text-white">
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin">Home</a>
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/questions">Fragen</a>
@@ -44,14 +44,15 @@
 				</div>
 			{/if}
 		</div>
-		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/codes">Codes</a>
+		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/users">Users</a>
+		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/logout">Logout</a>
 	</nav>
 	<slot />
 {:else}
 	<div class="absolute flex h-full w-full items-center justify-center overflow-hidden">
-		<a href="/login">
+		<a href="/login_admin">
 			<div class=" rounded-xl bg-slate-900 p-8 text-center dark:bg-white">
-				<h3 class="text-xl text-white dark:text-black">Du bist nicht eingeloggt!</h3>
+				<h3 class="text-xl text-white dark:text-black">Du bist nicht eingelogt!</h3>
 				<h3 class="text-lg text-sky-500 hover:underline">Login</h3>
 			</div></a
 		>

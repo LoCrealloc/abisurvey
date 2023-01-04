@@ -1,14 +1,22 @@
 import { Model, DataTypes } from "sequelize";
-import type { InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
+import type {
+	InferAttributes,
+	InferCreationAttributes,
+	CreationOptional,
+	ForeignKey,
+} from "sequelize";
 import { db } from "../database";
 
-import { Answer } from "./answer";
-import { Code } from "./code";
-import { PairAnswer } from "./pairanswer";
+import type { gender } from "$lib/common_types";
+import type { Person } from "./person";
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 	declare id: CreationOptional<number>;
-	declare name: string;
+	declare gender?: gender;
+	declare mail?: string;
+	declare code: string;
+	declare personId: ForeignKey<Person["id"]> | null;
+
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
@@ -20,7 +28,15 @@ User.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		name: DataTypes.STRING,
+		mail: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		gender: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		code: DataTypes.STRING,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},
@@ -29,13 +45,3 @@ User.init(
 		tableName: "users",
 	},
 );
-
-User.hasMany(Answer, { sourceKey: "id", foreignKey: "userId", as: "AnswerUser" });
-
-User.hasMany(PairAnswer, { sourceKey: "id", foreignKey: "userId", as: "PairAnswerUser" });
-
-User.hasOne(Code, {
-	sourceKey: "id",
-	foreignKey: "userId",
-	as: "CodeUser",
-}); // Reserved for potential future use

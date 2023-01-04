@@ -1,8 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import type { InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import { db } from "../database";
-import { Answer } from "./answer";
-import { PairAnswer } from "./pairanswer";
 
 export class Question extends Model<InferAttributes<Question>, InferCreationAttributes<Question>> {
 	declare id: CreationOptional<number>;
@@ -31,10 +29,3 @@ Question.init(
 		tableName: "questions",
 	},
 );
-
-Question.hasMany(Answer, { sourceKey: "id", foreignKey: "questionId", as: "AnswerQuestion" });
-Question.hasMany(PairAnswer, {
-	sourceKey: "id",
-	foreignKey: "questionId",
-	as: "PairAnswerQuestion",
-});

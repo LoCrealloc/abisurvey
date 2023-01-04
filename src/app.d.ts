@@ -3,7 +3,8 @@
 // and what to do when importing types
 declare namespace App {
 	interface Locals {
-		loggedIn: boolean;
+		loggedInAdmin: boolean;
+		userId: number | null;
 	}
 	// interface PageData {}
 	// interface Error {}

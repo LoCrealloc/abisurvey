@@ -1,14 +1,15 @@
 import type { Actions } from "@sveltejs/kit";
 
 import { User } from "$lib/server/models/user";
+import { error, redirect } from "@sveltejs/kit";
 import { SignJWT } from "jose";
 import { dev } from "$app/environment";
 
 import { SECRET } from "$env/static/private";
-import { error, redirect } from "@sveltejs/kit";
+
+import { validateGender } from "$lib/client/utils";
 
 const jwt_alg = "HS256";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const secret = new TextEncoder().encode(SECRET);
 
@@ -16,21 +17,41 @@ export const actions: Actions = {
 	default: async ({ request, cookies }) => {
 		const data = await request.formData();
 
-		const email = data.get("email");
-		const code = data.get("code");
+		console.log(data);
 
-		if (email === null || code == null) {
+		const code = data.get("code");
+		const email = data.get("email");
+		const gender = data.get("gender");
+
+		if (email === null || code === null || gender === null) {
 			throw error(404, "incomplete request");
 		}
 
+		const gender_str = gender.toString();
+
+		if (!validateGender(gender_str)) {
+			throw error(404, "incorrect gender input");
+		}
+
 		const user = await User.findOne({
-			attributes: ["mail", "id", "code"],
-			where: { mail: email.toString() },
+			attributes: ["id", "mail"],
+			where: { code: code.toString() },
 		});
 
-		if (user === null || user.dataValues.code !== code) {
+		if (user === null) {
 			throw error(401, "wrong code");
 		}
+
+		if (user.dataValues.mail !== null) {
+			throw error(409, "already registered");
+		}
+
+		const newUser = {
+			mail: email.toString(),
+			gender: gender_str,
+		};
+
+		await User.update(newUser, { where: { id: user.id } });
 
 		const jwt = await new SignJWT({ userId: user.dataValues.id })
 			.setProtectedHeader({ alg: jwt_alg })
