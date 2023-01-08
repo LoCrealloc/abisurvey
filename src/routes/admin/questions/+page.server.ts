@@ -35,8 +35,6 @@ export const actions: Actions = {
 
 		const data = await request.formData();
 
-		console.log(data);
-
 		const result = [];
 		let current: inQuestion = {
 			question: "",
