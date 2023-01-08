@@ -3,6 +3,8 @@
 	export let data;
 
 	import "../app.css";
+
+	$: userId.set(data.userId);
 </script>
 
 <div class="min-h-full">
