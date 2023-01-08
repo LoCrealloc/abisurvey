@@ -181,7 +181,7 @@
 	}
 </script>
 
-<div class="m-4">
+<div class="m-2 sm:m-0">
 	<h1 class="text-5xl dark:text-white">Umfrage</h1>
 	<form class="my-5" method="POST">
 		{#if questions.length > 0}
@@ -238,7 +238,7 @@
 									event.target.value = getPairAnswerForId(pairanswers, question.id, 2);
 								}}
 								type="text"
-								class="m-5 w-72 rounded-lg border-solid p-2"
+								class="m-5 mt-0 w-72 rounded-lg border-solid p-2"
 								placeholder="Deine Antwort.."
 								value={getPairAnswerForId(pairanswers, question.id, 2)}
 							/>
