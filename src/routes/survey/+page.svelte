@@ -202,19 +202,19 @@
 						<input
 							on:input|preventDefault={(event) =>
 								search(event.target.value, question.teacherQuestion, question.id)}
-							on:focusin={() => {
+							on:focusin={(event) => {
 								current = question.id;
 
 								pair_part = 1;
 
-								search("", question.teacherQuestion, question.id);
+								search(event.target.value, question.teacherQuestion, question.id);
 							}}
 							on:focusout={(event) => {
-								current = null;
-
 								event.target.value = !question.pair
 									? getAnswerForId(answers, question.id)
 									: getPairAnswerForId(pairanswers, question.id, 1);
+
+								current = null;
 							}}
 							type="text"
 							class="m-5 w-72 rounded-lg border-solid p-2"
@@ -227,17 +227,16 @@
 							<input
 								on:input|preventDefault={(event) =>
 									search(event.target.value, question.teacherQuestion, question.id)}
-								on:focusin={() => {
+								on:focusin={(event) => {
 									current = question.id;
 
 									pair_part = 2;
 
-									search("", question.teacherQuestion, question.id);
+									search(event.target.value, question.teacherQuestion, question.id);
 								}}
 								on:focusout={(event) => {
-									current = null;
-
 									event.target.value = getPairAnswerForId(pairanswers, question.id, 2);
+									current = null;
 								}}
 								type="text"
 								class="m-5 mt-0 w-72 rounded-lg border-solid p-2"
@@ -253,7 +252,10 @@
 								{#each searchResults as possibility}
 									<button
 										class="w-full border-b-2 p-1.5 text-left text-lg hover:bg-slate-500"
-										on:click|preventDefault={() => {
+										on:click={(event) => {
+											event.preventDefault();
+										}}
+										on:mousedown={() => {
 											if (!question.pair) {
 												if (Object.hasOwn(answers, question.id.toString())) {
 													answers[question.id].answerPossibilityId = possibility.id;
