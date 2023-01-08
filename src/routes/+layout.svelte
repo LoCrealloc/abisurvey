@@ -7,6 +7,6 @@
 	$: userId.set(data.userId);
 </script>
 
-<div class="h-full dark:bg-slate-900">
+<div class="h-full w-full">
 	<slot />
 </div>

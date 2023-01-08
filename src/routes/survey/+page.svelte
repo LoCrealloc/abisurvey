@@ -181,8 +181,8 @@
 	}
 </script>
 
-<div class="m-2 sm:m-0">
-	<h1 class="text-5xl dark:text-white">Umfrage</h1>
+<div class="mx-2 sm:m-0 lg:mx-8">
+	<h1 class="my-5 text-5xl dark:text-white">Umfrage</h1>
 	<form class="my-5" method="POST">
 		{#if questions.length > 0}
 			{#each questions as question, i}
@@ -191,7 +191,9 @@
 				{:else if teacherQuestions.length > 0 && question.id === teacherQuestions[0].id}
 					<h2 class="mt-8 mb-3 text-2xl dark:text-white">Lehrerfragen</h2>
 				{/if}
-				<fieldset class="mt-2 rounded-xl border-4 border-solid border-slate-900 bg-slate-500">
+				<fieldset
+					class="mt-2 rounded-xl border-4 border-solid border-slate-900 bg-slate-500 dark:bg-sky-700"
+				>
 					<legend
 						class="mx-5 w-72 rounded-xl border-2 border-solid border-slate-900 bg-white p-2 text-left text-slate-900 md:w-96"
 						>{question.question}</legend
@@ -315,7 +317,7 @@
 			<h1 class="m-8 text-center dark:text-white">Es sind noch keine Fragen vorhanden.</h1>
 		{/if}
 		<input
-			class="mt-8 w-full rounded-xl bg-slate-500 p-4 text-lg text-white"
+			class="mt-8 w-full cursor-pointer rounded-xl bg-slate-500 p-4 text-lg text-white hover:bg-sky-700 dark:bg-sky-700 dark:hover:bg-slate-500"
 			type="submit"
 			value="Absenden"
 		/>
