@@ -4,7 +4,7 @@
 declare namespace App {
 	interface Locals {
 		loggedInAdmin: boolean;
-		userId: number | null;
+		userId: number;
 	}
 	// interface PageData {}
 	// interface Error {}
