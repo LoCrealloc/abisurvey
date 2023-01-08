@@ -10,8 +10,6 @@
 		users = data.users.sort((a, b) => {
 			return a.surname.localeCompare(b.surname);
 		});
-
-		console.log(users);
 	});
 
 	function remove_user(index: number) {

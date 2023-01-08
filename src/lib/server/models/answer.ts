@@ -8,10 +8,11 @@ import type {
 import { db } from "../database";
 import type { Question } from "./question";
 import type { AnswerPossibility } from "./answerpossibility";
+import type { User } from "./user";
 
 export class Answer extends Model<InferAttributes<Answer>, InferCreationAttributes<Answer>> {
 	declare id: CreationOptional<number>;
-	declare userId: ForeignKey<number>;
+	declare userId: ForeignKey<User["id"]>;
 	declare questionId: ForeignKey<Question["id"]>;
 	declare answerPossibilityId: ForeignKey<AnswerPossibility["id"]>;
 	declare createdAt: CreationOptional<Date>;

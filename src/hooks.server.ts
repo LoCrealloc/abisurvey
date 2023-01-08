@@ -3,15 +3,10 @@ import { verify_logged_in, hash_password, verify_token_user } from "$lib/server/
 import { db } from "$lib/server/database";
 
 // import to load the models for db sync
-import { Answer } from "./lib/server/models/answer";
-import { AnswerPossibility } from "./lib/server/models/answerpossibility";
-import { PairAnswer } from "./lib/server/models/pairanswer";
-import { Question } from "./lib/server/models/question";
-import { User } from "./lib/server/models/user";
-import { Person } from "./lib/server/models/person";
-import { X } from "./lib/server/models/associations";
-
+import { User } from "$lib/server/models/user";
 import { Setting } from "$lib/server/models/setting";
+import { X } from "$lib/server/models/associations"; // Load associations
+
 import { DEFAULT_ADMIN_PASSWORD } from "$env/static/private";
 
 async function db_setup() {
@@ -28,8 +23,6 @@ async function db_setup() {
 			value: await hash_password(DEFAULT_ADMIN_PASSWORD),
 		},
 	];
-
-	console.log(initial_config);
 
 	for (let i = 0; i < initial_config.length; i++) {
 		await Setting.create(initial_config[i]);

@@ -15,8 +15,6 @@ interface inPerson {
 }
 
 export const load: PageServerLoad = async ({ params }) => {
-	console.log(params.type);
-
 	const data = (
 		await AnswerPossibility.findAll({
 			include: Person,

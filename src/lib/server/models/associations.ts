@@ -26,4 +26,10 @@ Answer.belongsTo(Question, { foreignKey: "questionId" });
 Question.hasOne(PairAnswer, { foreignKey: "questionId" });
 PairAnswer.belongsTo(Question, { foreignKey: "questionId" });
 
+User.hasOne(Answer, { foreignKey: "userId" });
+Answer.belongsTo(User, { foreignKey: "userId" });
+
+User.hasOne(PairAnswer, { foreignKey: "userId" });
+PairAnswer.belongsTo(User, { foreignKey: "userId" });
+
 export class X {}

@@ -99,8 +99,6 @@ export const actions: Actions = {
 			}
 		}
 
-		console.log(data);
-
 		for (const pair of data.entries()) {
 			const key = pair[0];
 			const value = pair[1];
