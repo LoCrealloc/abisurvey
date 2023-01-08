@@ -17,8 +17,6 @@ export const actions: Actions = {
 	default: async ({ request, cookies }) => {
 		const data = await request.formData();
 
-		console.log(data);
-
 		const code = data.get("code");
 		const email = data.get("email");
 		const gender = data.get("gender");

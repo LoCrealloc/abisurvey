@@ -1,7 +1,5 @@
 <script>
 	import { page } from "$app/stores";
-
-	console.log(page.status);
 </script>
 
 <div class="py-8 text-center dark:text-white">

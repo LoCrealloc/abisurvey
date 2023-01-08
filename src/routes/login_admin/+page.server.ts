@@ -51,9 +51,6 @@ export const actions: Actions = {
 				});
 			}
 
-			console.log(admin_hash);
-			console.log(password);
-
 			if (!(await compare(password.toString(), admin_hash))) {
 				throw error(401, {
 					message: "Wrong password",
