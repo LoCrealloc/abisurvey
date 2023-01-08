@@ -193,7 +193,7 @@
 				{/if}
 				<fieldset class="mt-2 rounded-xl border-4 border-solid border-slate-900 bg-slate-500">
 					<legend
-						class="mx-5 w-72 rounded-xl border-2 border-solid border-slate-900 bg-white p-2 text-left text-slate-900"
+						class="mx-5 w-72 rounded-xl border-2 border-solid border-slate-900 bg-white p-2 text-left text-slate-900 md:w-96"
 						>{question.question}</legend
 					>
 					<div>
