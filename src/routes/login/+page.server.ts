@@ -45,6 +45,6 @@ export const actions: Actions = {
 			maxAge: 60 * 60 * 24,
 		});
 
-		throw redirect(302, "/survey");
+		throw redirect(302, "/");
 	},
 };
