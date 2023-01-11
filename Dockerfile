@@ -3,8 +3,6 @@
 # stage build
 FROM node:16
 
-RUN apt-get update && apt-get install -y openssl
-
 WORKDIR /app
 
 # copy everything to th.e container
@@ -20,7 +18,7 @@ RUN npm audit fix
 RUN npm run build
 
 # stage run
-FROM node:16-alpine
+FROM node:16
 
 WORKDIR /app
 
