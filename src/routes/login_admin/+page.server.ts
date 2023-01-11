@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { env } from "process";
+import { env } from "node:process";
 const { SECRET } = env;
 import { error } from "@sveltejs/kit";
 

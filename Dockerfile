@@ -34,4 +34,4 @@ RUN npm audit fix
 # copy built SvelteKit app to /app
 COPY --from=0 /app/build ./
 
-CMD ["node", "-r", "dotenv/config", "./index.js"]
+CMD ["node", "./index.js"]

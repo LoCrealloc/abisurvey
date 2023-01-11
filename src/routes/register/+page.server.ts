@@ -5,7 +5,7 @@ import { error, redirect } from "@sveltejs/kit";
 import { SignJWT } from "jose";
 import { dev } from "$app/environment";
 
-import { env } from "process";
+import { env } from "node:process";
 const { SECRET } = env;
 
 import { validateGender } from "$lib/client/utils";

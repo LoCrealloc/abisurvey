@@ -7,7 +7,7 @@ import { User } from "$lib/server/models/user";
 import { Setting } from "$lib/server/models/setting";
 import { X } from "$lib/server/models/associations"; // Load associations
 
-import { env } from "process";
+import { env } from "node:process";
 const { DEFAULT_ADMIN_PASSWORD } = env;
 
 import { building } from "$app/environment";
