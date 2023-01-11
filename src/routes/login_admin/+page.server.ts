@@ -1,12 +1,14 @@
 import type { PageServerLoad } from "./$types";
-import { SECRET } from "$env/static/private";
+import { env } from "node:process";
+const { SECRET } = env;
 import { error } from "@sveltejs/kit";
 
 import { Setting } from "$lib/server/models/setting";
 
 import { SignJWT } from "jose";
 
-import { compare } from "bcrypt";
+import bcrypt from "bcryptjs";
+const { compare } = bcrypt;
 
 import { rdr_to_home } from "$lib/server/utilities";
 

@@ -1,4 +1,5 @@
-import { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } from "$env/static/private";
+import { env } from "node:process";
+const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = env;
 
 import { Sequelize } from "sequelize";
 

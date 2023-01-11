@@ -32,4 +32,9 @@ Answer.belongsTo(User, { foreignKey: "userId" });
 User.hasOne(PairAnswer, { foreignKey: "userId" });
 PairAnswer.belongsTo(User, { foreignKey: "userId" });
 
-export class X {}
+export class X {
+	log() {
+		// eslint-disable-next-line no-console
+		console.log("Associations loaded");
+	}
+}
