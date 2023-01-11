@@ -1,7 +1,7 @@
 name: Docker workflows
 
 env:
-  IMAGE_NAME: abisurvey
+  IMAGE_NAME: ${{ github.repository_owner }}/abisurvey
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ github.repository_owner }}/$IMAGE_NAME
+            $IMAGE_NAME
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
