@@ -1,5 +1,6 @@
 import type { PageServerLoad } from "./$types";
-import { SECRET } from "$env/static/private";
+import { env } from "process";
+const { SECRET } = env;
 import { error } from "@sveltejs/kit";
 
 import { Setting } from "$lib/server/models/setting";

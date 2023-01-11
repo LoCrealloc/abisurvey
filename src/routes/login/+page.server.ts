@@ -4,7 +4,8 @@ import { User } from "$lib/server/models/user";
 import { SignJWT } from "jose";
 import { dev } from "$app/environment";
 
-import { SECRET } from "$env/static/private";
+import { env } from "process";
+const { SECRET } = env;
 import { error, redirect } from "@sveltejs/kit";
 
 const jwt_alg = "HS256";
