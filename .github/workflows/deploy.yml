@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
+      - name: Copy sample env
+        run: cp abisite.env .env
       - name: Set Docker tags
         id: meta
         uses: docker/metadata-action@v4
