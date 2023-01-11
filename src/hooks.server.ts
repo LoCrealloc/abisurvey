@@ -9,6 +9,8 @@ import { X } from "$lib/server/models/associations"; // Load associations
 
 import { DEFAULT_ADMIN_PASSWORD } from "$env/static/private";
 
+import { building } from "$app/environment";
+
 async function db_setup() {
 	await db.sync();
 
@@ -66,4 +68,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-await db_setup();
+if (!building) {
+	// workaround for building failure; discussed here: https://github.com/sveltejs/kit/issues/7899
+	await db_setup();
+}

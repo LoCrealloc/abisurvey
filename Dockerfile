@@ -1,7 +1,9 @@
 # made by u/bluepuma77
 
 # stage build
-FROM node:16-alpine
+FROM node:16
+
+RUN apt-get update && apt-get install -y openssl
 
 WORKDIR /app
 

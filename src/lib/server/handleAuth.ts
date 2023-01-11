@@ -1,8 +1,8 @@
 import { jwtVerify } from "jose";
 import { SECRET } from "$env/static/private";
-import { genSalt, hash } from "bcrypt";
+import bcrypt from "bcryptjs";
+const { genSalt, hash } = bcrypt;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const secret = new TextEncoder().encode(SECRET);
 
