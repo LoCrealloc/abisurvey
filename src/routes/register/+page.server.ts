@@ -5,7 +5,8 @@ import { error, redirect } from "@sveltejs/kit";
 import { SignJWT } from "jose";
 import { dev } from "$app/environment";
 
-import { SECRET } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
+const { SECRET } = env;
 
 import { validateGender } from "$lib/client/utils";
 

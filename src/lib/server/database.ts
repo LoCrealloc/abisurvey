@@ -1,4 +1,5 @@
-import { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
+const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = env;
 
 import { Sequelize } from "sequelize";
 

@@ -7,7 +7,8 @@ import { User } from "$lib/server/models/user";
 import { Setting } from "$lib/server/models/setting";
 import { X } from "$lib/server/models/associations"; // Load associations
 
-import { DEFAULT_ADMIN_PASSWORD } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
+const { DEFAULT_ADMIN_PASSWORD } = env;
 
 import { building } from "$app/environment";
 

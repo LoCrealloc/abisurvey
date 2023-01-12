@@ -1,5 +1,6 @@
 import { jwtVerify } from "jose";
-import { SECRET } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
+const { SECRET } = env;
 import bcrypt from "bcryptjs";
 const { genSalt, hash } = bcrypt;
 
