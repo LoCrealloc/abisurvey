@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import * as levenshtein from "js-levenshtein";
+	import { distance } from "fastest-levenshtein";
 
 	import { scale } from "svelte/transition";
 
@@ -137,11 +137,11 @@
 				[p2, tests2],
 			].forEach((possibility) => {
 				possibility[1].forEach((test) => {
-					const distance = levenshtein(test, term);
+					const calculated_distance = distance(test, term);
 
-					if (distance < smallest[1]) {
+					if (calculated_distance < smallest[1]) {
 						smallest[0] = possibility[0];
-						smallest[1] = distance;
+						smallest[1] = calculated_distance;
 					}
 				});
 			});
@@ -154,14 +154,9 @@
 		});
 
 		searchResults = searchables.slice(0, 4);
-
-		// eslint-disable-next-line no-console
-		console.log(searchResults);
 	}
 
 	function getAnswerForId(obj: Record<string, Answer>, id: number): string {
-		// eslint-disable-next-line no-console
-		console.log(obj);
 		if (id.toString() in obj) {
 			return possibilities[obj[id].answerPossibilityId];
 		}
@@ -170,8 +165,6 @@
 	}
 
 	function getPairAnswerForId(obj: Record<string, PairAnswer>, id: number, part: 1 | 2): string {
-		// eslint-disable-next-line no-console
-		console.log(obj);
 		if (id.toString() in obj) {
 			let res;
 
