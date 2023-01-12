@@ -7,11 +7,7 @@ import { User } from "$lib/server/models/user";
 import { Setting } from "$lib/server/models/setting";
 import { X } from "$lib/server/models/associations"; // Load associations
 
-const x = new X();
-x.log();
-
-import { env } from "node:process";
-const { DEFAULT_ADMIN_PASSWORD } = env;
+import { DEFAULT_ADMIN_PASSWORD } from "$env/dynamic/private";
 
 import { building } from "$app/environment";
 
