@@ -43,6 +43,6 @@
 		"pg-hstore": "^2.3.4",
 		"sequelize": "^6.28.0",
 		"bcryptjs": "^2.4.3",
-	  	"js-levenshtein": "^1.1.6"
+		"js-levenshtein": "^1.1.6"
 	}
 }
