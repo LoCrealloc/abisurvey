@@ -154,6 +154,9 @@
 		});
 
 		searchResults = searchables.slice(0, 4);
+
+		// eslint-disable-next-line no-console
+		console.log(searchResults);
 	}
 
 	function getAnswerForId(obj: Record<string, Answer>, id: number): string {
