@@ -10,9 +10,7 @@
 <div class="min-h-full">
 	<slot />
 </div>
-<footer
-	class="grid w-full bg-slate-900 object-bottom p-9 text-white dark:bg-sky-700 md:fixed md:bottom-0"
->
+<footer class="mt-9 grid w-full bg-slate-900 object-bottom p-9 text-white dark:bg-sky-700">
 	<h3 class="text-center">
 		Diese Webseite ist freie und quelloffene Software! <a
 			class="text-blue-500 hover:underline dark:text-slate-900"
