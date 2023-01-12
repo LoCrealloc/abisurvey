@@ -160,7 +160,9 @@
 	}
 
 	function getAnswerForId(obj: Record<string, Answer>, id: number): string {
-		if (Object.hasOwn(obj, id.toString())) {
+		// eslint-disable-next-line no-console
+		console.log(obj);
+		if (id.toString() in obj) {
 			return possibilities[obj[id].answerPossibilityId];
 		}
 
@@ -168,7 +170,9 @@
 	}
 
 	function getPairAnswerForId(obj: Record<string, PairAnswer>, id: number, part: 1 | 2): string {
-		if (Object.hasOwn(obj, id.toString())) {
+		// eslint-disable-next-line no-console
+		console.log(obj);
+		if (id.toString() in obj) {
 			let res;
 
 			if (part === 1) {
@@ -260,7 +264,7 @@
 										}}
 										on:mousedown={() => {
 											if (!question.pair) {
-												if (Object.hasOwn(answers, question.id.toString())) {
+												if (question.id.toString() in answers) {
 													answers[question.id].answerPossibilityId = possibility.id;
 												} else {
 													answers[question.id] = {
@@ -269,7 +273,7 @@
 												}
 											} else {
 												let part = pair_part === 1 ? "answerOneId" : "answerTwoId";
-												if (!Object.hasOwn(pairanswers, question.id.toString())) {
+												if (!(question.id.toString() in pairanswers)) {
 													pairanswers[question.id] = {};
 												}
 
@@ -285,8 +289,8 @@
 						{/if}
 					</div>
 
-					{#if Object.hasOwn(answers, question.id.toString())}
-						{#if Object.hasOwn(answers[question.id.toString()], "id")}
+					{#if question.id.toString() in answers}
+						{#if "id" in answers[question.id.toString()]}
 							<input hidden name="answerId" value={answers[question.id.toString()].id} />
 						{/if}
 						<input
@@ -294,25 +298,23 @@
 							name="answerPossibilityId"
 							value={answers[question.id.toString()].answerPossibilityId}
 						/>
-					{:else if Object.hasOwn(pairanswers, question.id.toString())}
-						{#if Object.hasOwn(pairanswers, question.id.toString())}
-							{#if Object.hasOwn(pairanswers[question.id.toString()], "id")}
-								<input hidden name="answerId" value={pairanswers[question.id.toString()].id} />
-							{/if}
-							{#if Object.hasOwn(pairanswers[question.id.toString()], "answerOneId")}
-								<input
-									hidden
-									name="answerOneId"
-									value={pairanswers[question.id.toString()].answerOneId}
-								/>
-							{/if}
-							{#if Object.hasOwn(pairanswers[question.id.toString()], "answerTwoId")}
-								<input
-									hidden
-									name="answerTwoId"
-									value={pairanswers[question.id.toString()].answerTwoId}
-								/>
-							{/if}
+					{:else if question.id.toString() in pairanswers}
+						{#if "id" in pairanswers[question.id.toString()]}
+							<input hidden name="answerId" value={pairanswers[question.id.toString()].id} />
+						{/if}
+						{#if "answerOneId" in pairanswers[question.id.toString()]}
+							<input
+								hidden
+								name="answerOneId"
+								value={pairanswers[question.id.toString()].answerOneId}
+							/>
+						{/if}
+						{#if "answerTwoId" in pairanswers[question.id.toString()]}
+							<input
+								hidden
+								name="answerTwoId"
+								value={pairanswers[question.id.toString()].answerTwoId}
+							/>
 						{/if}
 					{/if}
 					<input hidden name="questionId" value={question.id} />
