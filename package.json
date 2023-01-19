@@ -25,7 +25,6 @@
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"jose": "^4.11.2",
-		"js-levenshtein": "^1.1.6",
 		"postcss": "^8.4.21",
 		"prettier": "^2.8.2",
 		"prettier-plugin-svelte": "^2.9.0",
@@ -40,9 +39,11 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"dotenv": "^16.0.3",
+		"fastest-levenshtein": "^1.0.16",
 		"pg": "^8.8.0",
 		"pg-hstore": "^2.3.4",
-		"sequelize": "^6.28.0",
-		"bcryptjs": "^2.4.3"
+		"sequelize": "^6.28.0"
 	}
 }
