@@ -2,9 +2,10 @@ import { Question } from "$lib/server/models/question";
 import type { PageServerLoad } from "./$types";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
-import { Answer } from "../../lib/server/models/answer";
+import { Answer } from "$lib/server/models/answer";
 import type { Actions } from "@sveltejs/kit";
-import { PairAnswer } from "../../lib/server/models/pairanswer";
+import { PairAnswer } from "$lib/server/models/pairanswer";
+import { compare_nums } from "$lib/server/utilities";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const possibilities = (
@@ -88,27 +89,34 @@ export const actions: Actions = {
 					);
 				}
 			} else {
+				const order = compare_nums(current_possibility, current_possibility_two)
+					? {
+							answerOneId: current_possibility,
+							answerTwoId: current_possibility_two,
+					  }
+					: {
+							answerOneId: current_possibility_two,
+							answerTwoId: current_possibility,
+					  };
+
 				if (current_answer === undefined) {
 					if (current_possibility === current_possibility_two) {
 						return;
 					}
 
-					await PairAnswer.create({
-						questionId: id,
-						answerOneId: current_possibility,
-						answerTwoId: current_possibility_two,
-						userId: locals.userId,
-					});
-				} else {
-					await PairAnswer.update(
-						{
-							answerOneId: current_possibility,
-							answerTwoId: current_possibility_two,
-						},
-						{
-							where: { id: current_answer, userId: locals.userId },
-						},
+					await PairAnswer.create(
+						Object.assign(
+							{
+								questionId: id,
+								userId: locals.userId,
+							},
+							order,
+						),
 					);
+				} else {
+					await PairAnswer.update(order, {
+						where: { id: current_answer, userId: locals.userId },
+					});
 				}
 			}
 		}
