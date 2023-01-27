@@ -23,20 +23,27 @@
 		answerTwoId?: number;
 	}
 
+	interface Question {
+		id: number;
+		question: string;
+		teacherQuestion: boolean;
+		pair: boolean;
+	}
+
 	export let data;
 
 	// variables to track the currently edited field
 	let current: number;
 	let pair_part: number;
 
-	let studentQuestions = [];
-	let teacherQuestions = [];
+	let studentQuestions: Array<Question> = [];
+	let teacherQuestions: Array<Question>= [];
 
 	// variable to have all questions
 	$: questions = studentQuestions.concat(teacherQuestions);
 
-	let teacherPossibilities = [];
-	let studentPossibilities = [];
+	let teacherPossibilities: Array<Possibility> = [];
+	let studentPossibilities: Array<Possibility> = [];
 
 	// easy access to full possibility names
 	let possibilities = {};
@@ -89,7 +96,7 @@
 
 	function search(term: string, teacher: boolean, questionId: number) {
 		// Calculates the order of the possibilities using the levenshtein distance
-		let searchables;
+		let searchables: Array<Possibility>;
 
 		if (teacher) {
 			searchables = [...teacherPossibilities];
@@ -185,7 +192,7 @@
 	<h1 class="my-5 text-5xl dark:text-white">Umfrage</h1>
 	<form class="my-5" method="POST">
 		{#if questions.length > 0}
-			{#each questions as question, i}
+			{#each questions as question}
 				{#if studentQuestions.length > 0 && question.id === studentQuestions[0].id}
 					<h2 class="mt-8 mb-3 text-2xl dark:text-white">Schülerfragen</h2>
 				{:else if teacherQuestions.length > 0 && question.id === teacherQuestions[0].id}
