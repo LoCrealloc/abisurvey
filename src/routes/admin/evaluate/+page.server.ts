@@ -34,5 +34,3 @@ export const load: PageServerLoad = async () => {
 		}),
 	};
 };
-
-// SELECT "questionId", "answerPossibilityId", COUNT("answerPossibilityId") FROM "answers" GROUP BY "questionId", "answerPossibilityId";
