@@ -35,7 +35,19 @@
 	// variable to have all questions
 	$: questions = studentQuestions.concat(teacherQuestions);
 
-	$: answered_num = Object.keys(answers).length + Object.keys(pairanswers).length;
+	const calc_answered_pairs = (obj: Record<string, PairAnswer>) => {
+		const keys = Object.keys(obj);
+
+		let res = 0.0;
+
+		keys.forEach((k) => {
+res +=  Object.keys(obj[k]).length / 2
+		})
+
+		return res
+	}
+
+	$: answered_num = Object.keys(answers).length + calc_answered_pairs(pairanswers)
 
 	let teacherPossibilities: Array<Possibility> = [];
 	let studentPossibilities: Array<Possibility> = [];
