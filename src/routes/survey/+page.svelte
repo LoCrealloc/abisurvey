@@ -41,13 +41,13 @@
 		let res = 0.0;
 
 		keys.forEach((k) => {
-res +=  Object.keys(obj[k]).length / 2
-		})
+			res += Object.keys(obj[k]).length / 2;
+		});
 
-		return res
-	}
+		return res;
+	};
 
-	$: answered_num = Object.keys(answers).length + calc_answered_pairs(pairanswers)
+	$: answered_num = Object.keys(answers).length + calc_answered_pairs(pairanswers);
 
 	let teacherPossibilities: Array<Possibility> = [];
 	let studentPossibilities: Array<Possibility> = [];
