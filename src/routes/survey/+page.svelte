@@ -37,7 +37,7 @@
 	let pair_part: number;
 
 	let studentQuestions: Array<Question> = [];
-	let teacherQuestions: Array<Question>= [];
+	let teacherQuestions: Array<Question> = [];
 
 	// variable to have all questions
 	$: questions = studentQuestions.concat(teacherQuestions);
