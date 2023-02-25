@@ -35,8 +35,22 @@
 	// variable to have all questions
 	$: questions = studentQuestions.concat(teacherQuestions);
 
-	let teacherPossibilities = [];
-	let studentPossibilities = [];
+	const calc_answered_pairs = (obj: Record<string, PairAnswer>) => {
+		const keys = Object.keys(obj);
+
+		let res = 0.0;
+
+		keys.forEach((k) => {
+			res += (Object.keys(obj[k]).length - 1) / 2;
+		});
+
+		return res;
+	};
+
+	$: answered_num = Object.keys(answers).length + calc_answered_pairs(pairanswers);
+
+	let teacherPossibilities: Array<Possibility> = [];
+	let studentPossibilities: Array<Possibility> = [];
 
 	// easy access to full possibility names
 	let possibilities = {};
@@ -180,6 +194,14 @@
 		return "";
 	}
 </script>
+
+{#if answered_num > 0}
+	<div class="sticky top-0">
+		<div class="w-full rounded-b-lg bg-slate-700 py-4 text-center opacity-95">
+			<h3 class="text-lg text-white">{answered_num} von {questions.length} Fragen beantwortet</h3>
+		</div>
+	</div>
+{/if}
 
 <div class="mx-2 sm:m-0 lg:mx-8">
 	<h1 class="my-5 text-5xl dark:text-white">Umfrage</h1>
