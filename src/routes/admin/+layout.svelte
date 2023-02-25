@@ -4,7 +4,8 @@
 
 	$: isLoggedInAdmin.set(data.loggedInAdmin);
 
-	let show_dropdown = false;
+	let show_possibility_types = false;
+	let show_result_types = false;
 </script>
 
 {#if data.loggedInAdmin}
@@ -13,7 +14,7 @@
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/questions">Fragen</a>
 		<div
 			on:click={() => {
-				show_dropdown = !show_dropdown;
+				show_possibility_types = !show_possibility_types;
 			}}
 			on:keydown={() => {
 				[];
@@ -35,7 +36,7 @@
 					/>
 				</svg>
 			</div>
-			{#if show_dropdown}
+			{#if show_possibility_types}
 				<div class="absolute right-5 z-10 w-56 origin-top-right rounded-md bg-slate-700">
 					<div class="py-1">
 						<a class="block py-2 hover:bg-slate-500" href="/admin/possibilities/student">Schüler</a>
@@ -45,6 +46,39 @@
 			{/if}
 		</div>
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/users">Users</a>
+		<div
+			on:click={() => {
+				show_result_types = !show_result_types;
+			}}
+			on:keydown={() => {
+				[];
+			}}
+			class="relative inline-block cursor-pointer p-5 text-left"
+		>
+			<div class="flex justify-center hover:text-sky-500 hover:underline">
+				<p>Ergebnisse</p>
+				<svg
+					class="h-5 w-5"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</div>
+			{#if show_result_types}
+				<div class="absolute right-5 z-10 w-56 origin-top-right rounded-md bg-slate-700">
+					<div class="py-1">
+						<a class="block py-2 hover:bg-slate-500" href="/admin/evaluate/student">Schüler</a>
+						<a class="block py-2 hover:bg-slate-500" href="/admin/evaluate/teacher">Lehrer</a>
+					</div>
+				</div>
+			{/if}
+		</div>
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/logout">Logout</a>
 	</nav>
 	<slot />
