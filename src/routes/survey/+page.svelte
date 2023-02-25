@@ -41,7 +41,15 @@
 		let res = 0.0;
 
 		keys.forEach((k) => {
-			res += (Object.keys(obj[k]).length - 1) / 2;
+			const keys = Object.keys(obj[k]);
+
+			let key_length = keys.length;
+
+			if (keys.includes("id")) {
+				key_length -= 1;
+			}
+
+			res += key_length / 2;
 		});
 
 		return res;
