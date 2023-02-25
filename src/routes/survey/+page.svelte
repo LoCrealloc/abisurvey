@@ -41,7 +41,7 @@
 		let res = 0.0;
 
 		keys.forEach((k) => {
-			res += Object.keys(obj[k]).length / 2;
+			res += (Object.keys(obj[k]).length - 1) / 2;
 		});
 
 		return res;
