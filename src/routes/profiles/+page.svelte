@@ -26,6 +26,8 @@
 				answer: attribute.answer,
 			};
 		});
+
+		console.log(attributes);
 	});
 
 	function getAttributeFor(id: number) {
@@ -60,16 +62,20 @@
 						>{field}</legend
 					>
 					<div>
-						<input
+						<textarea
 							on:input|preventDefault={(event) => {
-								setAttributeFor(id, event.target.value);
+								let value = event.target.value;
+								setAttributeFor(id, value);
+								let calculated_rows = (value.match(/\n/g) || []).length + 1;
+								event.target.rows = calculated_rows < 5 ? calculated_rows : 5;
 							}}
-							type="text"
-							class="m-5 w-72 rounded-lg border-solid p-2"
+							class="m-5 w-96 rounded-lg border-solid p-2 text-start"
 							placeholder="Deine Antwort.."
 							name="answer"
+							rows="1"
 							value={getAttributeFor(id)}
 						/>
+
 						{#if id.toString() in attributes && "id" in attributes[id.toString()]}
 							<input hidden name="attributeId" value={attributes[id.toString()].id} />
 						{/if}
