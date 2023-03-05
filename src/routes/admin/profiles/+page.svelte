@@ -10,6 +10,8 @@
 
 	let fields: Array<profileField> = [];
 
+	let picture_count = 0;
+
 	onMount(() => {
 		fields = data.fields.map((field: profileField) => {
 			return {
@@ -17,6 +19,8 @@
 				field: field.field,
 			};
 		});
+
+		picture_count = data.picture_count;
 	});
 
 	let new_field = "";
@@ -40,6 +44,25 @@
 
 <div class="m-5">
 	<h1 class="text-5xl dark:text-white">Steckbrief-Manager</h1>
+	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Bilderanzahl</h2>
+	<form method="POST" action="?/count">
+		<div
+			class="grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
+		>
+			<div class="col-span-4">
+				<input
+					bind:value={picture_count}
+					class="w-full rounded-lg p-3 text-black"
+					type="number"
+					placeholder="Bilderanzahl.."
+					name="count"
+				/>
+			</div>
+			<div class="place-self-center">
+				<input type="submit" value="Speichern" class="rounded-xl bg-white p-3 text-slate-900" />
+			</div>
+		</div>
+	</form>
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Feld hinzufügen</h2>
 	<form on:submit|preventDefault={add_field}>
 		<div
@@ -59,7 +82,7 @@
 		</div>
 	</form>
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Aktuelle Felder</h2>
-	<form class="my-5" method="POST">
+	<form class="my-5" method="POST" action="?/update">
 		{#if fields.length > 0}
 			{#each fields as field, i}
 				<div

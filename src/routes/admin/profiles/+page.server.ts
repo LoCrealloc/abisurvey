@@ -1,6 +1,8 @@
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "./$types";
 import { ProfileField } from "$lib/server/models/profilefield";
+import { Setting } from "$lib/server/models/setting";
+import { error } from "@sveltejs/kit";
 
 interface inField {
 	id?: number;
@@ -16,11 +18,20 @@ export const load: PageServerLoad = async () => {
 		).map((field) => {
 			return field.dataValues;
 		}),
+		picture_count: parseInt(
+			(
+				await Setting.findOrCreate({
+					where: { key: "PICTURE_COUNT" },
+					defaults: { key: "PICTURE_COUNT", value: "0" },
+					attributes: ["value"],
+				})
+			)[0].value,
+		),
 	};
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	update: async ({ request }) => {
 		// fetch question ids to check what needs to be deleted later
 		const field_ids = (
 			await ProfileField.findAll({
@@ -91,5 +102,24 @@ export const actions: Actions = {
 		});
 
 		await ProfileField.destroy({ where: { id: removables } });
+	},
+	count: async ({ request }) => {
+		const data = await request.formData();
+
+		const count = data.get("count");
+
+		if (count === null || count === undefined) {
+			throw error(400, { message: "Missing 'count' attribute" });
+		}
+
+		await (
+			await Setting.findOrCreate({
+				where: { key: "PICTURE_COUNT" },
+				defaults: { key: "PICTURE_COUNT", value: "0" },
+				attributes: ["id", "value"],
+			})
+		)[0]
+			.set("value", count.toString())
+			.save();
 	},
 };
