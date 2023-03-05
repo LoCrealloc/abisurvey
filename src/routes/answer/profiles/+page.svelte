@@ -28,8 +28,6 @@
 
 	let inputs;
 
-	let files;
-
 	onMount(() => {
 		fields = data.fields;
 
@@ -43,8 +41,6 @@
 		picture_count = data.picture_count;
 
 		inputs = Array(picture_count);
-
-		console.log(data.pictures);
 
 		data.pictures.forEach((picture, i) => {
 			images[i.toString()] = {
@@ -131,8 +127,6 @@
 								class="absolute right-2 top-2 z-10 origin-top-right rounded-full bg-white p-2 text-xl opacity-75"
 								on:click|preventDefault={() => {
 									delete images[i];
-									console.log(images);
-
 									images = structuredClone(images);
 								}}
 							>

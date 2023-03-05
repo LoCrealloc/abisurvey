@@ -67,8 +67,6 @@ export const actions: Actions = {
 
 		const confirmed_images: Array<number> = [];
 
-		console.log(data);
-
 		let current_attribute: number | undefined;
 		let current_answer: string | undefined;
 
