@@ -26,8 +26,6 @@
 				answer: attribute.answer,
 			};
 		});
-
-		console.log(attributes);
 	});
 
 	function getAttributeFor(id: number) {
@@ -49,7 +47,7 @@
 	}
 </script>
 
-<div class="mx-2 sm:m-0 lg:mx-8">
+<div class="mx-2 lg:mx-8 xs:m-0">
 	<h1 class="my-5 text-5xl dark:text-white">Steckbrief</h1>
 	<form class="my-5" method="POST">
 		{#if fields.length > 0}
@@ -69,7 +67,7 @@
 								let calculated_rows = (value.match(/\n/g) || []).length + 1;
 								event.target.rows = calculated_rows < 5 ? calculated_rows : 5;
 							}}
-							class="m-5 w-96 rounded-lg border-solid p-2 text-start"
+							class="m-5 mx-auto block w-11/12 rounded-lg border-solid p-2 text-start"
 							placeholder="Deine Antwort.."
 							name="answer"
 							rows="1"

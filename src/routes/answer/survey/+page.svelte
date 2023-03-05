@@ -218,7 +218,7 @@
 	</div>
 {/if}
 
-<div class="mx-2 sm:m-0 lg:mx-8">
+<div class="mx-2 lg:mx-8 xs:m-0">
 	<h1 class="my-5 text-5xl dark:text-white">Umfrage</h1>
 	<form class="my-5" method="POST">
 		{#if questions.length > 0}
