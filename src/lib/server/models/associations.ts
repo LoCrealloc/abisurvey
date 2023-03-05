@@ -4,6 +4,9 @@ import { PairAnswer } from "./pairanswer";
 import { Question } from "./question";
 import { Person } from "./person";
 import { User } from "./user";
+import { Attribute } from "./attribute";
+import { ProfileField } from "./profilefield";
+import { Picture } from "./picture";
 
 Person.hasOne(User, { foreignKey: "personId" });
 User.belongsTo(Person, { foreignKey: "personId" });
@@ -31,6 +34,15 @@ Answer.belongsTo(User, { foreignKey: "userId" });
 
 User.hasOne(PairAnswer, { foreignKey: "userId" });
 PairAnswer.belongsTo(User, { foreignKey: "userId" });
+
+ProfileField.hasOne(Attribute, { foreignKey: "profileFieldId" });
+Attribute.belongsTo(ProfileField, { foreignKey: "profileFieldId" });
+
+User.hasOne(Attribute, { foreignKey: "userId" });
+Attribute.belongsTo(User, { foreignKey: "userId" });
+
+User.hasOne(Picture, { foreignKey: "userId" });
+Picture.belongsTo(User, { foreignKey: "userId" });
 
 export class X {
 	log() {

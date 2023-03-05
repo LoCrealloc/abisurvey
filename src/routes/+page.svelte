@@ -198,7 +198,7 @@
 			</div>
 			<div class="mt-44">
 				<a
-					href="/survey"
+					href="/answer/survey"
 					in:blur={{ duration: 2000, delay: 2000 }}
 					class=" rounded-full bg-slate-900 p-5 px-24 text-xl text-white transition delay-100 duration-500 hover:bg-sky-800 hover:text-white dark:bg-white dark:text-slate-900"
 				>

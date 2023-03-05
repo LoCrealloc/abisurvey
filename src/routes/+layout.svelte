@@ -7,7 +7,7 @@
 	$: userId.set(data.userId);
 </script>
 
-<div class="min-h-full">
+<div class="min-h-full w-full">
 	<slot />
 </div>
 <footer class="mt-9 grid w-full bg-slate-900 object-bottom p-9 text-white dark:bg-sky-700">

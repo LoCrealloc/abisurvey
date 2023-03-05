@@ -17,7 +17,7 @@ import { building } from "$app/environment";
 async function db_setup() {
 	await db.sync();
 
-	const configs = await Setting.findAll();
+	const configs = await Setting.findAll({ where: { key: "ADMIN_PASSWORD" } });
 	if (configs.length > 0) {
 		return;
 	}
