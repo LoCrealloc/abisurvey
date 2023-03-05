@@ -15,7 +15,7 @@
 			width="16"
 			height="16"
 			fill="currentColor"
-			class="bi bi-list scale-150"
+			class="scale-150"
 			viewBox="0 0 16 16"
 		>
 			<path
@@ -25,7 +25,7 @@
 		</svg>
 	</button>
 	<div class="m-4 ml-auto rounded-full bg-slate-900 p-4 text-white">
-		<a class="hover:text-sky-500 hover:underline" href="/logout">Logout</a>
+		<a class="hover:text-sky-500" href="/logout">Logout</a>
 	</div>
 	{#if show}
 		<br />
