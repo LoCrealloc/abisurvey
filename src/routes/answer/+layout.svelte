@@ -1,5 +1,11 @@
 <script lang="ts">
+	import { afterNavigate } from "$app/navigation";
+
 	let show = false;
+
+	afterNavigate(() => {
+		show = false;
+	});
 </script>
 
 <nav
