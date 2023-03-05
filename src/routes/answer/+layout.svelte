@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { afterNavigate } from "$app/navigation";
 
+	import { fade, slide } from "svelte/transition";
+
 	let show = false;
 
 	afterNavigate(() => {
@@ -35,11 +37,11 @@
 	</div>
 	{#if show}
 		<br />
-		<div class="flex w-full flex-col">
-			<div class="mb-4">
+		<div class="flex w-full flex-col" transition:fade>
+			<div class="mb-4" transition:slide>
 				<a class="hover:text-white hover:underline" href="/answer/survey">Umfrage</a>
 			</div>
-			<div class="mb-4">
+			<div class="mb-4" transition:slide>
 				<a class="hover:text-white hover:underline" href="/answer/profiles">Steckbrief</a>
 			</div>
 		</div>
