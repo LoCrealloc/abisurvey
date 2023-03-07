@@ -79,7 +79,6 @@ export const actions: Actions = {
 
 			if (field !== null) {
 				if (current_answer.length > 503) {
-					console.log(current_answer.length);
 					throw error(400, { message: "answer too long" });
 				}
 

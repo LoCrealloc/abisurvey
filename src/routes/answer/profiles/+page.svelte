@@ -108,7 +108,6 @@
 								let value = event.target.value;
 								setAttributeFor(id, value);
 								event.target.rows = calculate_rows(value);
-								console.log(value.length);
 							}}
 							class="m-5 mx-auto block w-11/12 rounded-lg border-solid p-2 text-start"
 							placeholder="Deine Antwort.."
