@@ -78,7 +78,8 @@ export const actions: Actions = {
 			const field = await ProfileField.findOne({ where: { id: id } });
 
 			if (field !== null) {
-				if (current_answer.length > 500) {
+				if (current_answer.length > 503) {
+					console.log(current_answer.length);
 					throw error(400, { message: "answer too long" });
 				}
 
