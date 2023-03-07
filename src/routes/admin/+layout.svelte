@@ -80,6 +80,9 @@
 				</div>
 			{/if}
 		</div>
+		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/profileresults"
+			>Steckbriefergebnisse</a
+		>
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/logout">Logout</a>
 	</nav>
 	<slot />

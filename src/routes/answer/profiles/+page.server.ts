@@ -78,6 +78,10 @@ export const actions: Actions = {
 			const field = await ProfileField.findOne({ where: { id: id } });
 
 			if (field !== null) {
+				if (current_answer.length > 503) {
+					throw error(400, { message: "answer too long" });
+				}
+
 				if (current_attribute === undefined) {
 					await Attribute.create({
 						profileFieldId: id,

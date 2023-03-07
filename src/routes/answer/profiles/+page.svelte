@@ -83,6 +83,11 @@
 			}
 		};
 	}
+
+	function calculate_rows(value: string): number {
+		let calculated_rows = (value.match(/\n/g) || []).length + 1;
+		return calculated_rows < 5 ? calculated_rows : 5;
+	}
 </script>
 
 <div class="mx-2 lg:mx-8 xs:m-0">
@@ -102,14 +107,14 @@
 							on:input|preventDefault={(event) => {
 								let value = event.target.value;
 								setAttributeFor(id, value);
-								let calculated_rows = (value.match(/\n/g) || []).length + 1;
-								event.target.rows = calculated_rows < 5 ? calculated_rows : 5;
+								event.target.rows = calculate_rows(value);
 							}}
 							class="m-5 mx-auto block w-11/12 rounded-lg border-solid p-2 text-start"
 							placeholder="Deine Antwort.."
 							name="answer"
-							rows="1"
+							rows={calculate_rows(getAttributeFor(id))}
 							value={getAttributeFor(id)}
+							maxlength="500"
 						/>
 
 						{#if id.toString() in attributes && "id" in attributes[id.toString()]}
