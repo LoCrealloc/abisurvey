@@ -43,7 +43,7 @@
 						<img
 							src={picture}
 							alt={`Nr. ${i}`}
-							class="w-full cursor-pointer rounded-xl border-4 border-slate-900 dark:border-sky-700"
+							class="w-full rounded-xl border-4 border-slate-900 dark:border-sky-700"
 						/>
 					</div>
 				{/each}
