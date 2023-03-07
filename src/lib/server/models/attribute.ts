@@ -28,7 +28,7 @@ Attribute.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		answer: DataTypes.STRING,
+		answer: DataTypes.TEXT,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},
