@@ -8,6 +8,8 @@ import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "@sveltejs/kit";
 
+export const ssr = false;
+
 export const load: PageServerLoad = async ({ locals }) => {
 	const count_setting = await Setting.findOne({
 		where: { key: "PICTURE_COUNT" },
