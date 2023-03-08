@@ -4,6 +4,8 @@
 
 	import { scale } from "svelte/transition";
 
+	import { edited } from "$lib/client/stores/refresh";
+
 	interface Possibility {
 		forename: string;
 		surname: string;
@@ -117,6 +119,8 @@
 	let searchResults: Array<Possibility> = [];
 
 	function search(term: string, teacher: boolean, questionId: number) {
+		edited.set(true);
+
 		// Calculates the order of the possibilities using the levenshtein distance
 		let searchables: Array<Possibility>;
 

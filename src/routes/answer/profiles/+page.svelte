@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
+	import { edited } from "$lib/client/stores/refresh";
+
 	interface Attribute {
 		id?: number;
 		answer: string;
@@ -58,6 +60,8 @@
 	}
 
 	function setAttributeFor(id: number, value: string) {
+		edited.set(true);
+
 		const str_id = id.toString();
 		if (str_id in attributes) {
 			attributes[str_id].answer = value;
@@ -69,6 +73,8 @@
 	}
 
 	function getImageB64(image: Blob, num: number) {
+		edited.set(true);
+
 		const reader = new FileReader();
 		reader.readAsDataURL(image);
 		reader.onload = (e) => {
