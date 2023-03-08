@@ -13,8 +13,8 @@
 	},
 	"devDependencies": {
 		"@jridgewell/sourcemap-codec": "^1.4.14",
-		"@sveltejs/adapter-node": "^1.2.1",
-		"@sveltejs/kit": "^1.10.0",
+		"@sveltejs/adapter-node": "^1.2.2",
+		"@sveltejs/kit": "^1.11.0",
 		"@types/bcryptjs": "^2.4.2",
 		"@types/d3-format": "^3.0.1",
 		"@types/d3-hierarchy": "^3.1.2",
