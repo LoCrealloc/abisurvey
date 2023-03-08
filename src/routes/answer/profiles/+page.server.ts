@@ -48,7 +48,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	fields: async ({ request, locals }) => {
+	default: async ({ request, locals }) => {
 		const data = await request.formData();
 
 		const count_setting = await Setting.findOne({

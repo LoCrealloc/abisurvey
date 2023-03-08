@@ -2,30 +2,39 @@
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { fade, slide } from "svelte/transition";
 
-	import { edited } from "$lib/client/stores/refresh";
+	import { edited, actionCall } from "$lib/client/stores/refresh";
 
 	let show = false;
 	let askConfirm = false;
+	let isAction = false;
 
 	edited.subscribe((value: boolean) => {
 		askConfirm = value;
 	});
 
+	actionCall.subscribe((value: boolean) => {
+		isAction = value;
+	});
+
 	afterNavigate(() => {
+		edited.set(false);
+		actionCall.set(false);
 		show = false;
 	});
 
 	beforeNavigate((navigation) => {
-		if (!navigation.willUnload && askConfirm) {
-			if (
-				!confirm(
-					"Sicher, dass du die Seite verlassen willst? Nicht gespeicherte Daten können verloren gehen!",
-				)
-			) {
+		if (!isAction) {
+			if (!navigation.willUnload && askConfirm) {
+				if (
+					!confirm(
+						"Sicher, dass du die Seite verlassen willst? Nicht gespeicherte Daten können verloren gehen!",
+					)
+				) {
+					navigation.cancel();
+				}
+			} else if (askConfirm) {
 				navigation.cancel();
 			}
-		} else if (askConfirm) {
-			navigation.cancel();
 		}
 	});
 </script>

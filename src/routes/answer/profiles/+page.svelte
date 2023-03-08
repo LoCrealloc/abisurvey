@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	import { edited } from "$lib/client/stores/refresh";
+	import { edited, actionCall } from "$lib/client/stores/refresh";
 
 	interface Attribute {
 		id?: number;
@@ -98,7 +98,13 @@
 
 <div class="mx-2 lg:mx-8 xs:m-0">
 	<h1 class="my-5 text-5xl dark:text-white">Steckbrief</h1>
-	<form class="my-5" method="POST" action="?/fields">
+	<form
+		class="my-5"
+		method="POST"
+		on:submit={() => {
+			actionCall.set(true);
+		}}
+	>
 		{#if fields.length > 0}
 			{#each fields as { field, id }}
 				<fieldset

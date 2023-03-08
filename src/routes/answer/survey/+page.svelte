@@ -4,7 +4,7 @@
 
 	import { scale } from "svelte/transition";
 
-	import { edited } from "$lib/client/stores/refresh";
+	import { edited, actionCall } from "$lib/client/stores/refresh";
 
 	interface Possibility {
 		forename: string;
@@ -224,7 +224,13 @@
 
 <div class="mx-2 lg:mx-8 xs:m-0">
 	<h1 class="my-5 text-5xl dark:text-white">Umfrage</h1>
-	<form class="my-5" method="POST">
+	<form
+		class="my-5"
+		method="POST"
+		on:submit={() => {
+			actionCall.set(true);
+		}}
+	>
 		{#if questions.length > 0}
 			{#each questions as question}
 				{#if studentQuestions.length > 0 && question.id === studentQuestions[0].id}
