@@ -46,6 +46,7 @@
 		"d3-hierarchy": "^3.1.2",
 		"dotenv": "^16.0.3",
 		"fastest-levenshtein": "^1.0.16",
+		"heic2any": "^0.0.3",
 		"layercake": "^7.2.2",
 		"pg": "^8.10.0",
 		"pg-hstore": "^2.3.4",
