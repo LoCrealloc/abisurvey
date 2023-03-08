@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
+	import { edited, actionCall } from "$lib/client/stores/refresh";
+
 	interface Attribute {
 		id?: number;
 		answer: string;
@@ -58,6 +60,8 @@
 	}
 
 	function setAttributeFor(id: number, value: string) {
+		edited.set(true);
+
 		const str_id = id.toString();
 		if (str_id in attributes) {
 			attributes[str_id].answer = value;
@@ -69,6 +73,8 @@
 	}
 
 	function getImageB64(image: Blob, num: number) {
+		edited.set(true);
+
 		const reader = new FileReader();
 		reader.readAsDataURL(image);
 		reader.onload = (e) => {
@@ -92,7 +98,13 @@
 
 <div class="mx-2 lg:mx-8 xs:m-0">
 	<h1 class="my-5 text-5xl dark:text-white">Steckbrief</h1>
-	<form class="my-5" method="POST" action="?/fields">
+	<form
+		class="my-5"
+		method="POST"
+		on:submit={() => {
+			actionCall.set(true);
+		}}
+	>
 		{#if fields.length > 0}
 			{#each fields as { field, id }}
 				<fieldset
