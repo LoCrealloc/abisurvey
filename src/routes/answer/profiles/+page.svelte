@@ -5,6 +5,8 @@
 
 	import heic2any from "heic2any";
 
+	export const ssr = false;
+
 	interface Attribute {
 		id?: number;
 		answer: string;
