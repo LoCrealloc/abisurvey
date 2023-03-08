@@ -1,12 +1,25 @@
 <script lang="ts">
-	import { afterNavigate } from "$app/navigation";
-
+	import { afterNavigate, beforeNavigate } from "$app/navigation";
 	import { fade, slide } from "svelte/transition";
 
 	let show = false;
 
 	afterNavigate(() => {
 		show = false;
+	});
+
+	beforeNavigate((navigation) => {
+		if (!navigation.willUnload) {
+			if (
+				!confirm(
+					"Sicher, dass du die Seite verlassen willst? Nicht gespeicherte Daten können verloren gehen!",
+				)
+			) {
+				navigation.cancel();
+			}
+		} else {
+			navigation.cancel();
+		}
 	});
 </script>
 
