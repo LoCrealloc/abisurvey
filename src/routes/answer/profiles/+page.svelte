@@ -3,6 +3,8 @@
 
 	import { edited, actionCall } from "$lib/client/stores/refresh";
 
+	import heic2any from "heic2any";
+
 	interface Attribute {
 		id?: number;
 		answer: string;
@@ -72,19 +74,33 @@
 		}
 	}
 
-	function getImageB64(image: Blob, num: number) {
+	async function getImageB64(image: Blob, num: number) {
 		edited.set(true);
 
 		const reader = new FileReader();
-		reader.readAsDataURL(image);
-		reader.onload = (e) => {
+
+		if (/image\/hei[c|f]/.test(image.type)) {
+			let heic_blob = await heic2any({ blob: image });
+
+			if (Array.isArray(heic_blob)) {
+				heic_blob = heic_blob[0];
+			}
+
+			reader.readAsDataURL(heic_blob);
+		} else {
+			reader.readAsDataURL(image);
+		}
+
+		reader.onload = async (e) => {
 			const str_num = num.toString();
 
+			let result = e.target.result.toString();
+
 			if (str_num in images) {
-				images[str_num]["image"] = e.target.result.toString();
+				images[str_num]["image"] = result;
 			} else {
 				images[str_num] = {
-					image: e.target.result.toString(),
+					image: result,
 				};
 			}
 		};
@@ -178,10 +194,10 @@
 						<input
 							class="hidden"
 							type="file"
-							accept=".png,.jpg"
+							accept="image/*"
 							bind:this={inputs[i]}
-							on:change={(event) => {
-								getImageB64(event.target.files[0], i);
+							on:change={async (event) => {
+								await getImageB64(event.target.files[0], i);
 							}}
 						/>
 						{#if i.toString() in images}
