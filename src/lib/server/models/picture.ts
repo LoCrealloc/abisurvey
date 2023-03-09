@@ -11,7 +11,7 @@ import type { User } from "./user";
 export class Picture extends Model<InferAttributes<Picture>, InferCreationAttributes<Picture>> {
 	declare id: CreationOptional<number>;
 	declare userId: ForeignKey<User["id"]>;
-	declare image: Blob;
+	declare image: string;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
@@ -23,7 +23,7 @@ Picture.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		image: DataTypes.BLOB,
+		image: DataTypes.TEXT,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},

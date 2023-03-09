@@ -8,6 +8,9 @@ import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "@sveltejs/kit";
 
+import fs from "fs/promises";
+import path from "path";
+
 export const ssr = false;
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -62,13 +65,6 @@ export const actions: Actions = {
 			count_setting !== null ? count_setting.getDataValue("value") : "0",
 		);
 
-		const former_images = await Picture.findAll({
-			where: { userId: locals.userId },
-			attributes: ["id"],
-		});
-
-		const confirmed_images: Array<number> = [];
-
 		let current_attribute: number | undefined;
 		let current_answer: string | undefined;
 
@@ -112,20 +108,36 @@ export const actions: Actions = {
 				current_attribute = parseInt(value.toString());
 			} else if (key === "answer") {
 				current_answer = value.toString();
-			} else if (key === "image") {
-				const content = JSON.parse(value.toString());
+			} else if (key.startsWith("image")) {
+				const id_regex = key.match(/\d+/);
+				let id: number | null;
 
-				if (!("image" in content)) {
-					throw error(400, { message: "No image provided" });
+				if (value.name === "undefined") {
+					continue;
 				}
 
-				if ("id" in content && !isNaN(parseInt(content["id"]))) {
-					confirmed_images.push(parseInt(content["id"]));
+				if (id_regex !== null) {
+					id = parseInt(id_regex[0]);
+				} else {
+					id = null;
+				}
 
-					await Picture.update(
-						{ image: content["image"] },
-						{ where: { id: parseInt(content["id"]), userId: locals.userId } },
-					);
+				const filePath = path.join(
+					process.cwd(),
+					`${crypto.randomUUID()}.${(value as Blob).type.split("/")[1]}`,
+				);
+
+				try {
+					await fs.writeFile(filePath, Buffer.from(await (value as Blob).arrayBuffer()));
+				} catch (err) {
+					throw error(500, { message: "Image upload did not work" });
+				}
+
+				const result =
+					`data:${value.type};base64,` + (await fs.readFile(filePath)).toString("base64");
+
+				if (id !== null) {
+					await Picture.update({ image: result }, { where: { id: id, userId: locals.userId } });
 				} else {
 					const added_pictures = await Picture.count({ where: { userId: locals.userId } });
 
@@ -133,19 +145,20 @@ export const actions: Actions = {
 						throw error(400, { message: "Max number of images reached" });
 					}
 
-					const new_picture = await Picture.create({
+					await Picture.create({
 						userId: locals.userId,
-						image: content["image"],
+						image: result,
 					});
-					confirmed_images.push(new_picture.id);
 				}
+
+				await fs.rm(filePath);
+			} else if (key === "deleted_picture") {
+				const id = value.toString();
+				if (isNaN(parseInt(id))) {
+					throw error(400, { message: "Bad image id" });
+				}
+				await Picture.destroy({ where: { id: parseInt(id) } });
 			}
 		}
-
-		former_images.forEach(async (image) => {
-			if (!confirmed_images.includes(image.getDataValue("id"))) {
-				await image.destroy();
-			}
-		});
 	},
 };

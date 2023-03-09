@@ -32,7 +32,11 @@
 
 	let inputs;
 
+	let deletedPictures: Array<number> = [];
+
 	onMount(() => {
+		console.log(data);
+
 		fields = data.fields;
 
 		data.attributes.forEach((attribute) => {
@@ -74,36 +78,24 @@
 		}
 	}
 
-	async function getImageB64(image: Blob, num: number) {
+	async function processImage(image: Blob, num: number) {
+		console.log(image);
+
 		edited.set(true);
 
-		const reader = new FileReader();
-
-		if (/image\/hei[c|f]/.test(image.type)) {
-			let heic_blob = await heic2any({ blob: image });
-
-			if (Array.isArray(heic_blob)) {
-				heic_blob = heic_blob[0];
-			}
-
-			reader.readAsDataURL(heic_blob);
-		} else {
-			reader.readAsDataURL(image);
+		if (!["image/png", "image/jpeg"].includes(image.type)) {
+			alert("Dieses Dateiformat wird nicht unterstützt! Bitte nutze eine JPEG- oder PNG-Datei!");
 		}
 
-		reader.onload = async (e) => {
-			const str_num = num.toString();
+		const str_num = num.toString();
 
-			let result = e.target.result.toString();
-
-			if (str_num in images) {
-				images[str_num]["image"] = result;
-			} else {
-				images[str_num] = {
-					image: result,
-				};
-			}
-		};
+		if (str_num in images) {
+			images[str_num]["image"] = image;
+		} else {
+			images[str_num] = {
+				image: image,
+			};
+		}
 	}
 
 	function calculate_rows(value: string): number {
@@ -120,6 +112,7 @@
 		on:submit={() => {
 			actionCall.set(true);
 		}}
+		enctype="multipart/form-data"
 	>
 		{#if fields.length > 0}
 			{#each fields as { field, id }}
@@ -156,11 +149,17 @@
 				{#each [...Array(picture_count).keys()] as i}
 					<div class="relative inline-block w-full">
 						{#if i in images}
+							{@const imageData = images[i]["image"]}
 							<button
 								class="absolute right-2 top-2 z-10 origin-top-right rounded-full bg-white p-2 text-xl opacity-75"
 								on:click|preventDefault={() => {
-									delete images[i];
 									images = structuredClone(images);
+									const id = images[i].id;
+									if (id !== undefined) {
+										deletedPictures.push(id);
+									}
+									deletedPictures = [...deletedPictures];
+									delete images[i];
 								}}
 							>
 								<svg
@@ -177,8 +176,8 @@
 								</svg>
 							</button>
 							<img
-								src={images[i]["image"]}
-								alt={`Nr. ${i}`}
+								src={typeof imageData === "string" ? imageData : URL.createObjectURL(imageData)}
+								alt="Ungültige Datei"
 								on:click|preventDefault={() => inputs[i].click()}
 								on:keypress={() => {
 									return 0;
@@ -192,20 +191,23 @@
 							>
 						{/if}
 						<input
+							name={i.toString() in images && "id" in images[i.toString()]
+								? `image-${images[i.toString()].id}`
+								: "image"}
 							class="hidden"
 							type="file"
-							accept="image/*"
+							accept="image/png, image/jpeg"
 							bind:this={inputs[i]}
 							on:change={async (event) => {
-								await getImageB64(event.target.files[0], i);
+								await processImage(event.target.files[0], i);
 							}}
 						/>
-						{#if i.toString() in images}
-							<input hidden type="text" value={JSON.stringify(images[i.toString()])} name="image" />
-						{/if}
 					</div>
 				{/each}
 			</div>
+			{#each deletedPictures as del_id}
+				<input type="text" hidden value={del_id.toString()} name="deleted_picture" />
+			{/each}
 		{:else}
 			<h1 class="m-8 text-center dark:text-white">Es sind noch keine Fragen vorhanden.</h1>
 		{/if}
