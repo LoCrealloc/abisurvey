@@ -11,7 +11,9 @@ import type { User } from "./user";
 export class Picture extends Model<InferAttributes<Picture>, InferCreationAttributes<Picture>> {
 	declare id: CreationOptional<number>;
 	declare userId: ForeignKey<User["id"]>;
-	declare image: Blob;
+	declare image: Buffer;
+	declare mimetype: string;
+	declare size: number;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
@@ -23,7 +25,9 @@ Picture.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		image: DataTypes.BLOB,
+		image: DataTypes.BLOB("long"),
+		mimetype: { type: DataTypes.TEXT, allowNull: false },
+		size: { type: DataTypes.INTEGER, allowNull: false },
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},

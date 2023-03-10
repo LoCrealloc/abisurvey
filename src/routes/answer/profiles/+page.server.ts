@@ -8,8 +8,6 @@ import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "@sveltejs/kit";
 
-export const ssr = false;
-
 export const load: PageServerLoad = async ({ locals }) => {
 	const count_setting = await Setting.findOne({
 		where: { key: "PICTURE_COUNT" },
@@ -37,13 +35,16 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}),
 		picture_count: parseInt(count_setting !== null ? count_setting.getDataValue("value") : "0"),
 		pictures: (
-			await Picture.findAll({ attributes: ["id", "image"], where: { userId: locals.userId } })
+			await Picture.findAll({
+				attributes: ["id"],
+				where: { userId: locals.userId },
+			})
 		).map((picture) => {
 			const data = picture.dataValues;
 
 			return {
 				id: data.id,
-				image: data.image.toString(),
+				image: `/images/${data.id}`,
 			};
 		}),
 	};
@@ -61,13 +62,6 @@ export const actions: Actions = {
 		const picture_count = parseInt(
 			count_setting !== null ? count_setting.getDataValue("value") : "0",
 		);
-
-		const former_images = await Picture.findAll({
-			where: { userId: locals.userId },
-			attributes: ["id"],
-		});
-
-		const confirmed_images: Array<number> = [];
 
 		let current_attribute: number | undefined;
 		let current_answer: string | undefined;
@@ -112,19 +106,26 @@ export const actions: Actions = {
 				current_attribute = parseInt(value.toString());
 			} else if (key === "answer") {
 				current_answer = value.toString();
-			} else if (key === "image") {
-				const content = JSON.parse(value.toString());
+			} else if (key.startsWith("image")) {
+				const id_regex = key.match(/\d+/);
+				let id: number | null;
 
-				if (!("image" in content)) {
-					throw error(400, { message: "No image provided" });
+				const file = Buffer.from(await value.arrayBuffer());
+
+				if (value.name === "undefined") {
+					continue;
 				}
 
-				if ("id" in content && !isNaN(parseInt(content["id"]))) {
-					confirmed_images.push(parseInt(content["id"]));
+				if (id_regex !== null) {
+					id = parseInt(id_regex[0]);
+				} else {
+					id = null;
+				}
 
+				if (id !== null) {
 					await Picture.update(
-						{ image: content["image"] },
-						{ where: { id: parseInt(content["id"]), userId: locals.userId } },
+						{ image: file, mimetype: value.type, size: value.size },
+						{ where: { id: id, userId: locals.userId } },
 					);
 				} else {
 					const added_pictures = await Picture.count({ where: { userId: locals.userId } });
@@ -133,19 +134,20 @@ export const actions: Actions = {
 						throw error(400, { message: "Max number of images reached" });
 					}
 
-					const new_picture = await Picture.create({
+					await Picture.create({
 						userId: locals.userId,
-						image: content["image"],
+						image: file,
+						mimetype: value.type,
+						size: value.size,
 					});
-					confirmed_images.push(new_picture.id);
 				}
+			} else if (key === "deleted_picture") {
+				const id = value.toString();
+				if (isNaN(parseInt(id))) {
+					throw error(400, { message: "Bad image id" });
+				}
+				await Picture.destroy({ where: { id: parseInt(id) } });
 			}
 		}
-
-		former_images.forEach(async (image) => {
-			if (!confirmed_images.includes(image.getDataValue("id"))) {
-				await image.destroy();
-			}
-		});
 	},
 };

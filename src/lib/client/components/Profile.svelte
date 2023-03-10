@@ -37,13 +37,16 @@
 			{/each}
 		</div>
 		{#if pictures.length > 0}
-			<div class="mx-auto grid max-w-4xl place-items-center gap-2 p-8 sm:grid-cols-4">
+			<div
+				class="mx-auto grid max-w-4xl grid-flow-row place-items-center gap-2 p-8 sm:grid-flow-col"
+			>
 				{#each pictures as picture, i}
 					<div class="relative inline-block w-full">
 						<img
 							src={picture}
 							alt={`Nr. ${i}`}
 							class="w-full rounded-xl border-4 border-slate-900 dark:border-sky-700"
+							loading="lazy"
 						/>
 					</div>
 				{/each}

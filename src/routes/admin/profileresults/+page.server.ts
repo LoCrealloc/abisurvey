@@ -37,11 +37,11 @@ export const load: PageServerLoad = async () => {
 		).map((field) => {
 			return field.dataValues;
 		}),
-		pictures: (await Picture.findAll({ attributes: ["userId", "image"] })).map((picture) => {
+		pictures: (await Picture.findAll({ attributes: ["userId", "id"] })).map((picture) => {
 			const data = picture.dataValues;
 
 			return {
-				image: data.image.toString(),
+				image: `/images/${data.id}`,
 				userId: data.userId,
 			};
 		}),
