@@ -3,8 +3,6 @@
 
 	import { edited, actionCall } from "$lib/client/stores/refresh";
 
-	import heic2any from "heic2any";
-
 	interface Attribute {
 		id?: number;
 		answer: string;
@@ -17,7 +15,7 @@
 
 	interface Picture {
 		id?: number;
-		image: string;
+		image: string | Blob;
 	}
 
 	export let data;
@@ -79,8 +77,6 @@
 	}
 
 	async function processImage(image: Blob, num: number) {
-		console.log(image);
-
 		edited.set(true);
 
 		if (!["image/png", "image/jpeg"].includes(image.type)) {
@@ -183,6 +179,7 @@
 									return 0;
 								}}
 								class="w-full cursor-pointer rounded-xl border-4 border-slate-900 dark:border-sky-700"
+								loading="lazy"
 							/>
 						{:else}
 							<button
