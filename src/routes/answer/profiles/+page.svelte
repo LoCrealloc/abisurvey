@@ -33,8 +33,6 @@
 	let deletedPictures: Array<number> = [];
 
 	onMount(() => {
-		console.log(data);
-
 		fields = data.fields;
 
 		data.attributes.forEach((attribute) => {
