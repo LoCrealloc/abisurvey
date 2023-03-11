@@ -19,13 +19,15 @@ export const actions: Actions = {
 		const data = await request.formData();
 
 		const code = data.get("code");
-		const email = data.get("email");
+		let email = data.get("email");
 		const gender = data.get("gender");
 		const accept_privacy = data.get("accept_privacy");
 
 		if (email === null || code === null || gender === null || accept_privacy === null) {
 			throw error(400, "incomplete request");
 		}
+
+		email = email.toString().toLowerCase();
 
 		if (accept_privacy !== "on") {
 			throw error(400, "you have to accept the privacy policy");
@@ -51,7 +53,7 @@ export const actions: Actions = {
 		}
 
 		const newUser = {
-			mail: email.toString(),
+			mail: email,
 			gender: gender_str,
 		};
 

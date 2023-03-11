@@ -17,16 +17,18 @@ export const actions: Actions = {
 	default: async ({ request, cookies }) => {
 		const data = await request.formData();
 
-		const email = data.get("email");
+		let email = data.get("email");
 		const code = data.get("code");
 
 		if (email === null || code == null) {
 			throw error(404, "incomplete request");
 		}
 
+		email = email.toString().toLowerCase();
+
 		const user = await User.findOne({
 			attributes: ["mail", "id", "code"],
-			where: { mail: email.toString() },
+			where: { mail: email },
 		});
 
 		if (user === null || user.dataValues.code !== code) {
