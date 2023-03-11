@@ -20,7 +20,7 @@
 	<h3 class="mt-2 text-center text-sm text-slate-400">
 		Developed by LoC | Paul Scheurmann-Kettner
 	</h3>
-	<div class="mx-auto mt-5 grid grid-cols-3 place-items-center">
+	<div class="mx-auto mt-5 grid grid-cols-2 place-items-center">
 		<h4 class="text-xs text-slate-500 hover:underline">
 			<a href="/policy">Datenschutzrichtlinie</a>
 		</h4>
