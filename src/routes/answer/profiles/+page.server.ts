@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		fields: (
 			await ProfileField.findAll({
 				attributes: ["id", "field"],
-				order: [["field", "ASC"]],
+				order: [["id", "ASC"]],
 			})
 		).map((field) => {
 			return field.dataValues;
