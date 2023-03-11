@@ -21,15 +21,20 @@ export const actions: Actions = {
 		const code = data.get("code");
 		const email = data.get("email");
 		const gender = data.get("gender");
+		const accept_privacy = data.get("accept_privacy");
 
-		if (email === null || code === null || gender === null) {
-			throw error(404, "incomplete request");
+		if (email === null || code === null || gender === null || accept_privacy === null) {
+			throw error(400, "incomplete request");
+		}
+
+		if (accept_privacy !== "on") {
+			throw error(400, "you have to accept the privacy policy");
 		}
 
 		const gender_str = gender.toString();
 
 		if (!validateGender(gender_str)) {
-			throw error(404, "incorrect gender input");
+			throw error(400, "incorrect gender input");
 		}
 
 		const user = await User.findOne({

@@ -1,15 +1,17 @@
 <script lang="ts">
 	let code = "";
 	let email = "";
+	let gender = "";
 
 	$: hideEmail = code.length == 8;
 	$: hideGender = email !== "";
+	$: hidePrivacy = gender !== "";
 </script>
 
-<div class="py-5 text-center dark:text-white ">
+<div class="text-center dark:text-white ">
 	<h1 class="my-5 text-3xl">Willkommen bei der Abizeitungs-Umfrage</h1>
 	<h3 class="m-2 text-lg">Bitte gib unten den Code ein, den du von unserem Team erhalten hast</h3>
-	<div class="my-9 grid grid-rows-5">
+	<div class="mx-1">
 		<form method="POST">
 			<div>
 				<input
@@ -41,7 +43,7 @@
 						id="gender"
 						name="gender"
 						required
-						value=""
+						bind:value={gender}
 					>
 						<option value="m"> Männlich </option>
 						<option value="w"> Weiblich </option>
@@ -49,7 +51,21 @@
 					</select>
 				</div>
 			{/if}
-			{#if hideGender}
+			{#if hidePrivacy}
+				<div class="my-1">
+					<input
+						id="accept_privacy"
+						type="checkbox"
+						required
+						name="accept_privacy"
+						class="mr-2 scale-150"
+					/>
+					<label for="accept_privacy"
+						>Ich habe die <a class="text-sky-500 hover:underline" href="/policy"
+							>Datenschutzrichtlinie</a
+						> gelesen und akzeptiere sie.</label
+					>
+				</div>
 				<div>
 					<input
 						class="my-1 w-80 rounded-xl rounded-xl border-2 border-solid border-sky-500 bg-sky-500 p-3 text-xl text-slate-900"

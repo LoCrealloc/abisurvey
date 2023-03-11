@@ -47,6 +47,7 @@
 		</div>
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/users">Users</a>
 		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/profiles">Steckbrieffelder</a>
+		<a class="p-5 hover:text-sky-500 hover:underline" href="/admin/policy">Richtlinien</a>
 		<div
 			on:click={() => {
 				show_result_types = !show_result_types;
