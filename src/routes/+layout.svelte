@@ -22,7 +22,7 @@
 	</h3>
 	<div class="mx-auto mt-5 grid grid-cols-3 place-items-center">
 		<h4 class="text-xs text-slate-500 hover:underline">
-			<a href="/answer/policy">Datenschutzrichtlinie</a>
+			<a href="/policy">Datenschutzrichtlinie</a>
 		</h4>
 	</div>
 </footer>

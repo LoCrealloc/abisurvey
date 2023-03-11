@@ -51,7 +51,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.loggedInAdmin = true;
 	} else {
 		const isLoginRoute =
-			event.url.pathname.startsWith("/login") || event.url.pathname.startsWith("/register");
+			event.url.pathname.startsWith("/login") ||
+			event.url.pathname.startsWith("/register") ||
+			event.url.pathname.startsWith("/policy");
 
 		const token = event.cookies.get("usersession");
 		let userId;
