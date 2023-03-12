@@ -5,8 +5,6 @@ import { User } from "$lib/server/models/user";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
 
-import { APP_ORIGIN } from "$env/static/private";
-
 interface inPerson {
 	id?: number;
 	forename: string;
@@ -21,7 +19,7 @@ interface inUser {
 	personId: number | null;
 }
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ url }) => {
 	const data = (
 		await User.findAll({
 			include: Person,
@@ -45,7 +43,7 @@ export const load: PageServerLoad = async () => {
 				surname: row.Person.surname,
 			};
 		}),
-		origin: APP_ORIGIN,
+		origin: url.origin,
 	};
 };
 
