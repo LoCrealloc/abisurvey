@@ -18,10 +18,10 @@ Setting.init(
 			autoIncrement: true,
 		},
 		key: {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			unique: true,
 		},
-		value: DataTypes.STRING,
+		value: DataTypes.TEXT,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},

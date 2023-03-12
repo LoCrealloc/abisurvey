@@ -1,12 +1,17 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { onMount, tick } from "svelte";
 
 	export let data;
 
 	let privay_policy = "";
+	let policy_area;
 
-	onMount(() => {
+	onMount(async () => {
 		privay_policy = data.privacy;
+
+		await tick();
+
+		policy_area.style.height = policy_area.scrollHeight + "px";
 	});
 </script>
 
@@ -17,10 +22,10 @@
 	>
 		<h1 class="my-2 text-xl text-white">Datenschutzrichtlinie</h1>
 		<textarea
-			disabled
+			readonly
 			class="w-full rounded-lg bg-white p-3 text-black"
 			value={privay_policy}
-			oninput="this.style.height = ''; this.style.height = this.scrollHeight +'px'"
+			bind:this={policy_area}
 		/>
 	</div>
 </div>

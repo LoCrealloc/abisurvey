@@ -1,12 +1,17 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { onMount, tick } from "svelte";
 
 	export let data;
 
 	let policy_text = "";
 
-	onMount(() => {
+	let policy_area;
+
+	onMount(async () => {
 		policy_text = data.privacy;
+		await tick();
+
+		policy_area.style.height = policy_area.scrollHeight + "px";
 	});
 </script>
 
@@ -19,6 +24,7 @@
 				name="privacy"
 				class="w-full rounded-lg p-3 text-black"
 				placeholder="Neue Richtlinie.."
+				bind:this={policy_area}
 				bind:value={policy_text}
 				rows="5"
 				oninput="this.style.height = ''; this.style.height = this.scrollHeight +'px'"
