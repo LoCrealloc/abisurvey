@@ -11,6 +11,8 @@
 		users = data.users.sort((a, b) => {
 			return a.surname.localeCompare(b.surname);
 		});
+
+		origin = data.origin;
 	});
 
 	function remove_user(index: number) {
@@ -18,8 +20,6 @@
 		users = [...users].sort((a, b) => {
 			return a.surname.localeCompare(b.surname);
 		});
-
-		origin = data.origin;
 	}
 </script>
 
