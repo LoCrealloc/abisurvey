@@ -20,7 +20,7 @@
 			disabled
 			class="w-full rounded-lg bg-white p-3 text-black"
 			value={privay_policy}
-			rows={(privay_policy.match(/\n/g) || []).length + +1}
+			oninput="this.style.height = ''; this.style.height = this.scrollHeight +'px'"
 		/>
 	</div>
 </div>
