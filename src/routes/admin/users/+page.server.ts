@@ -5,6 +5,8 @@ import { User } from "$lib/server/models/user";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
 
+import { APP_ORIGIN } from "$env/static/private";
+
 interface inPerson {
 	id?: number;
 	forename: string;
@@ -43,6 +45,7 @@ export const load: PageServerLoad = async () => {
 				surname: row.Person.surname,
 			};
 		}),
+		origin: APP_ORIGIN,
 	};
 };
 

@@ -5,6 +5,7 @@
 	export let data;
 
 	let users = [];
+	let origin = "";
 
 	onMount(() => {
 		users = data.users.sort((a, b) => {
@@ -17,6 +18,8 @@
 		users = [...users].sort((a, b) => {
 			return a.surname.localeCompare(b.surname);
 		});
+
+		origin = data.origin;
 	}
 </script>
 
@@ -158,12 +161,13 @@
 		type="submit"
 		on:click={() => {
 			downloadText(
-				JSON.stringify(
-					users.map((user) => {
+				JSON.stringify({
+					origin: origin,
+					users: users.map((user) => {
 						return { name: `${user.forename} ${user.surname}`, code: user.code };
 					}),
-				),
-				"users.txt",
+				}),
+				"users.json",
 			);
 		}}
 	>
