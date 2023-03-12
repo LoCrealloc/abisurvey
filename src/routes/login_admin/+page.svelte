@@ -4,7 +4,7 @@
 		<form method="POST">
 			<input
 				class="rounded-xl rounded-xl border-2 border-solid border-sky-500 bg-white p-3 px-8 text-xl text-black"
-				type="text"
+				type="password"
 				placeholder="Passwort eingeben.."
 				name="password"
 			/>

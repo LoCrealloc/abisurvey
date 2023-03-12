@@ -15,7 +15,7 @@
 			<div>
 				<input
 					class="my-1 w-80 rounded-xl rounded-xl border-2 border-solid border-sky-500 bg-white p-3 text-xl text-black"
-					type="text"
+					type="password"
 					placeholder="Code eingeben.."
 					name="code"
 					required
