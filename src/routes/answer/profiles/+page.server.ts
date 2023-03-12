@@ -8,6 +8,9 @@ import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "@sveltejs/kit";
 
+import { env } from "$env/dynamic/private";
+const { FILE_SIZE_LIMIT } = env;
+
 export const load: PageServerLoad = async ({ locals }) => {
 	const count_setting = await Setting.findOne({
 		where: { key: "PICTURE_COUNT" },
@@ -34,6 +37,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			return attribute.dataValues;
 		}),
 		picture_count: parseInt(count_setting !== null ? count_setting.getDataValue("value") : "0"),
+		size_limit: FILE_SIZE_LIMIT !== undefined ? parseInt(FILE_SIZE_LIMIT) : 0,
 		pictures: (
 			await Picture.findAll({
 				attributes: ["id"],
@@ -114,6 +118,20 @@ export const actions: Actions = {
 
 				if (value.name === "undefined") {
 					continue;
+				}
+
+				if (
+					FILE_SIZE_LIMIT !== undefined &&
+					value.size > parseInt(FILE_SIZE_LIMIT) &&
+					parseInt(FILE_SIZE_LIMIT) !== 0
+				) {
+					throw error(413, { message: `The image ${value.name} is too big.` });
+				}
+
+				if (!["image/jpeg", "image/png"].includes(value.type)) {
+					throw error(415, {
+						message: `The type ${value.type} of image ${avalue.name} is not supported! We only accept PNG or JPEG files!`,
+					});
 				}
 
 				if (id_regex !== null) {

@@ -30,9 +30,12 @@
 
 	let inputs;
 
+	let FILE_SIZE_LIMIT = 0;
+
 	let deletedPictures: Array<number> = [];
 
 	onMount(() => {
+		console.log(data);
 		fields = data.fields;
 
 		data.attributes.forEach((attribute) => {
@@ -52,6 +55,8 @@
 				image: picture.image,
 			};
 		});
+
+		FILE_SIZE_LIMIT = data.size_limit;
 	});
 
 	function getAttributeFor(id: number) {
@@ -79,6 +84,14 @@
 
 		if (!["image/png", "image/jpeg"].includes(image.type)) {
 			alert("Dieses Dateiformat wird nicht unterstützt! Bitte nutze eine JPEG- oder PNG-Datei!");
+		}
+
+		if (image.size > FILE_SIZE_LIMIT && FILE_SIZE_LIMIT !== 0) {
+			alert(
+				`Das angegebene Bild ist zu groß! Bitte lade ein Bild hoch, das kleiner als ${
+					FILE_SIZE_LIMIT / 1000000000
+				} Gigabyte ist!`,
+			);
 		}
 
 		const str_num = num.toString();
