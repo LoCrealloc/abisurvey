@@ -36,9 +36,9 @@
 		{#if users.length > 0}
 			{#each users as user, i}
 				<div
-					class="my-2 grid grid-cols-10 grid-rows-1 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white"
+					class="my-2 grid grid-cols-2 grid-rows-6 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white sm:grid-cols-10 sm:grid-rows-1"
 				>
-					<div class="col-span-1">
+					<div class="col-span-2 sm:col-span-1">
 						<input
 							on:input|preventDefault={(event) => {
 								user.forename = event.target.value;
@@ -89,7 +89,7 @@
 							readonly
 						/>
 					</div>
-					<div class="col-span-2">
+					<div class="col-span-2 flex items-center">
 						<input
 							on:click|preventDefault={() => {
 								if (
@@ -101,14 +101,14 @@
 								}
 							}}
 							value={user.code}
-							class="w-36 rounded-lg p-3 text-black hover:cursor-pointer hover:bg-red-600"
+							class="base-5/6 rounded-lg p-3 text-black hover:cursor-pointer hover:bg-red-600 "
 							type="text"
 							name="code"
 							required
 							readonly
 						/>
 						<button
-							class="rounded-lg bg-white p-1 hover:bg-sky-500"
+							class="base-1/6 mx-auto rounded-lg bg-white p-1 hover:bg-sky-500"
 							on:click|preventDefault={async () => {
 								await navigator.clipboard.writeText(user.code);
 							}}
@@ -133,9 +133,9 @@
 							</svg>
 						</button>
 					</div>
-					<div class="place-self-center">
+					<div class="col-span-2 sm:col-span-1 sm:place-self-center">
 						<button
-							class="rounded-xl bg-white p-3 text-slate-900 hover:bg-red-600"
+							class="w-full rounded-xl bg-white p-3 text-slate-900 hover:bg-red-600"
 							on:click|preventDefault={() => remove_user(i)}>Entfernen</button
 						>
 					</div>
