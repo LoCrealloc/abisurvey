@@ -46,10 +46,8 @@
 	<h1 class="text-5xl dark:text-white">Steckbrief-Manager</h1>
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Bilderanzahl</h2>
 	<form method="POST" action="?/count">
-		<div
-			class="grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
-		>
-			<div class="col-span-4">
+		<div class="grid grid-cols-3 grid-rows-1 gap-2 rounded-xl bg-slate-500 p-5 text-white">
+			<div class="col-span-2">
 				<input
 					bind:value={picture_count}
 					class="w-full rounded-lg p-3 text-black"
@@ -58,7 +56,7 @@
 					name="count"
 				/>
 			</div>
-			<div class="place-self-center">
+			<div class="col-span-1 place-self-center">
 				<input type="submit" value="Speichern" class="rounded-xl bg-white p-3 text-slate-900" />
 			</div>
 		</div>
@@ -66,9 +64,9 @@
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Feld hinzufügen</h2>
 	<form on:submit|preventDefault={add_field}>
 		<div
-			class="grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
+			class="grid grid-cols-3 grid-rows-2 gap-2 rounded-xl bg-slate-500 p-5 text-white sm:grid-rows-1"
 		>
-			<div class="col-span-4">
+			<div class="col-span-3 sm:col-span-2">
 				<input
 					bind:value={new_field}
 					class="w-full rounded-lg p-3 text-black"
@@ -76,8 +74,12 @@
 					placeholder="Neues Feld.."
 				/>
 			</div>
-			<div class="place-self-center">
-				<input type="submit" value="Hinzufügen" class="rounded-xl bg-white p-3 text-slate-900" />
+			<div class="col-span-3 sm:col-span-1 sm:place-self-center">
+				<input
+					type="submit"
+					value="Hinzufügen"
+					class="w-full rounded-xl bg-white p-3 text-slate-900"
+				/>
 			</div>
 		</div>
 	</form>
@@ -86,9 +88,9 @@
 		{#if fields.length > 0}
 			{#each fields as field, i}
 				<div
-					class="my-2 grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
+					class="my-2 grid grid-cols-3 grid-rows-2 gap-2 rounded-xl bg-slate-500 p-5 text-white sm:grid-rows-1"
 				>
-					<div class="col-span-4">
+					<div class="col-span-3 sm:col-span-2">
 						<input
 							on:input|preventDefault={(event) => {
 								field.field = event.target.value;
@@ -100,9 +102,9 @@
 							name="field"
 						/>
 					</div>
-					<div class="place-self-center">
+					<div class="col-span-3 sm:col-span-1 sm:place-self-center">
 						<button
-							class="rounded-xl bg-white p-3 text-slate-900"
+							class="w-full rounded-xl bg-white p-3 text-slate-900"
 							on:click={(event) => remove_field(event, i)}>Entfernen</button
 						>
 					</div>
