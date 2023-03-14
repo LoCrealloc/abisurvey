@@ -49,7 +49,7 @@
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Möglichkeit hinzufügen</h2>
 	<form on:submit|preventDefault={add_possibility}>
 		<div
-			class="grid grid-cols-5 grid-rows-1 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white"
+			class="grid grid-cols-2 grid-rows-3 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white sm:grid-cols-5 sm:grid-rows-1"
 		>
 			<div class="col-span-2">
 				<input
@@ -67,8 +67,12 @@
 					placeholder="Nachname"
 				/>
 			</div>
-			<div class="place-self-center">
-				<input type="submit" value="Hinzufügen" class="rounded-xl bg-white p-3 text-slate-900" />
+			<div class="col-span-2 sm:col-span-1 sm:place-self-center">
+				<input
+					type="submit"
+					value="Hinzufügen"
+					class="w-full rounded-xl bg-white p-3 text-slate-900"
+				/>
 			</div>
 		</div>
 	</form>
@@ -77,7 +81,7 @@
 		{#if possibilities.length > 0}
 			{#each possibilities as possibility, i}
 				<div
-					class="my-2 grid grid-cols-5 grid-rows-1 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white"
+					class="my-2 grid grid-cols-2 grid-rows-3 place-items-stretch gap-3 rounded-xl bg-slate-500 p-5 text-white sm:grid-cols-5 sm:grid-rows-1"
 				>
 					<div class="col-span-2">
 						<input
@@ -103,9 +107,9 @@
 							name="surname"
 						/>
 					</div>
-					<div class="place-self-center">
+					<div class="col-span-2 sm:col-span-1 sm:place-self-center">
 						<button
-							class="rounded-xl bg-white p-3 text-slate-900 hover:bg-red-600"
+							class="w-full rounded-xl bg-white p-3 text-slate-900 hover:bg-red-600"
 							on:click|preventDefault={() => remove_possibility(i)}>Entfernen</button
 						>
 					</div>
