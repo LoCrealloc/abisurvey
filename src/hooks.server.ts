@@ -56,6 +56,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (verified) {
 			event.locals.loggedInAdmin = true;
 		}
+
+		if (path.startsWith("/images")) {
+			resolve(event);
+		}
 	}
 
 	if (!event.locals.loggedInAdmin) {
