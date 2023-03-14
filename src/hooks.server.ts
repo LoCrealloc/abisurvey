@@ -46,12 +46,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	if (path.startsWith("/admin") || path.startsWith("/images")) {
 		const token = event.cookies.get("token");
-		if (!(await verify_logged_in(token))) {
+
+		const verified = await verify_logged_in(token);
+
+		if (!verified && !path.startsWith("/images")) {
 			return redirect("Not logged in", "/login_admin");
 		}
 
-		event.locals.loggedInAdmin = true;
-	} else {
+		if (verified) {
+			event.locals.loggedInAdmin = true;
+		}
+	}
+
+	if (!event.locals.loggedInAdmin) {
 		const isLoginRoute =
 			path.startsWith("/login") || path.startsWith("/register") || path.startsWith("/policy");
 
