@@ -41,7 +41,7 @@ export const load: PageServerLoad = async () => {
 			const data = picture.dataValues;
 
 			return {
-				image: `/images/${data.id}`,
+				image: `/admin/images/${data.id}`,
 				userId: data.userId,
 			};
 		}),

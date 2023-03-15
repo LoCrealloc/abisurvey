@@ -44,7 +44,7 @@ function redirect(body: string, location: string) {
 export const handle: Handle = async ({ event, resolve }) => {
 	const path = event.url.pathname;
 
-	if (path.startsWith("/admin") || path.startsWith("/images")) {
+	if (path.startsWith("/admin")) {
 		const token = event.cookies.get("token");
 		if (!(await verify_logged_in(token))) {
 			return redirect("Not logged in", "/login_admin");
