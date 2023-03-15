@@ -6,6 +6,8 @@ import { Person } from "$lib/server/models/person";
 import { Question } from "$lib/server/models/question";
 import { PairAnswer } from "$lib/server/models/pairanswer";
 
+import { Op } from "sequelize";
+
 interface QueriedPossibility {
 	id: number;
 	Person: Person;
@@ -79,6 +81,14 @@ export const load: PageServerLoad = async ({ params }) => {
 				"answerTwoId",
 				[db.fn("count", "answerOneId"), "count"],
 			],
+			where: {
+				answerOneId: {
+					[Op.not]: null,
+				},
+				answerTwoId: {
+					[Op.not]: null,
+				},
+			},
 			group: ["questionId", "answerOneId", "answerTwoId", "Question.id"],
 		})
 	).map((row) => {

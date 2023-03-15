@@ -51,7 +51,7 @@
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Fragen hinzufügen</h2>
 	<form on:submit|preventDefault={add_question}>
 		<div
-			class="grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
+			class="grid grid-cols-2 grid-rows-3 place-items-stretch rounded-xl bg-slate-500 p-5 text-white sm:grid-cols-5 sm:grid-rows-1"
 		>
 			<div class="col-span-2">
 				<input
@@ -77,8 +77,12 @@
 					type="checkbox"
 				/>
 			</div>
-			<div class="place-self-center">
-				<input type="submit" value="Hinzufügen" class="rounded-xl bg-white p-3 text-slate-900" />
+			<div class="col-span-2 sm:col-span-1 sm:place-self-center">
+				<input
+					type="submit"
+					value="Hinzufügen"
+					class="w-full rounded-xl bg-white p-3 text-slate-900"
+				/>
 			</div>
 		</div>
 	</form>
@@ -87,7 +91,7 @@
 		{#if questions.length > 0}
 			{#each questions as question, i}
 				<div
-					class="my-2 grid grid-cols-5 grid-rows-1 place-items-stretch rounded-xl bg-slate-500 p-5 text-white"
+					class="my-2 grid grid-cols-2 grid-rows-3 place-items-stretch rounded-xl bg-slate-500 p-5 text-white sm:grid-cols-5 sm:grid-rows-1"
 				>
 					<div class="col-span-2">
 						<input
@@ -129,9 +133,9 @@
 							name="teacherQuestion"
 						/>
 					</div>
-					<div class="place-self-center">
+					<div class="col-span-2 sm:col-span-1 sm:place-self-center">
 						<button
-							class="rounded-xl bg-white p-3 text-slate-900"
+							class="w-full rounded-xl bg-white p-3 text-slate-900"
 							on:click={(event) => remove_question(event, i)}>Entfernen</button
 						>
 					</div>

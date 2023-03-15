@@ -42,7 +42,9 @@ function redirect(body: string, location: string) {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (event.url.pathname.startsWith("/admin")) {
+	const path = event.url.pathname;
+
+	if (path.startsWith("/admin")) {
 		const token = event.cookies.get("token");
 		if (!(await verify_logged_in(token))) {
 			return redirect("Not logged in", "/login_admin");
@@ -51,9 +53,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.loggedInAdmin = true;
 	} else {
 		const isLoginRoute =
-			event.url.pathname.startsWith("/login") ||
-			event.url.pathname.startsWith("/register") ||
-			event.url.pathname.startsWith("/policy");
+			path.startsWith("/login") || path.startsWith("/register") || path.startsWith("/policy");
 
 		const token = event.cookies.get("usersession");
 		let userId;
