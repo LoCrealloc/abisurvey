@@ -1,6 +1,10 @@
 import type { PageServerLoad, Actions } from "./$types";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
+import { Answer } from "$lib/server/models/answer";
+import { PairAnswer } from "$lib/server/models/pairanswer";
+
+import { Op } from "sequelize";
 
 interface inPossibility {
 	id?: number;
@@ -46,7 +50,7 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	default: async ({ request, params }) => {
 		// fetch answer possibility ids to check what needs to be deleted later
-		const possibility_ids = (
+		const possibility_ids: Array<number> = (
 			await AnswerPossibility.findAll({
 				attributes: ["id"],
 				where: {
@@ -131,11 +135,15 @@ export const actions: Actions = {
 
 		const removables: Array<number> = [];
 
-		possibility_ids.forEach((number) => {
-			if (!processed.includes(number)) {
-				removables.push(number);
+		for (const id of possibility_ids) {
+			if (!processed.includes(id)) {
+				await Answer.destroy({ where: { answerPossibilityId: id } });
+				await PairAnswer.destroy({
+					where: { [Op.or]: [{ answerOneId: id }, { answerTwoId: id }] },
+				});
+				removables.push(id);
 			}
-		});
+		}
 
 		await AnswerPossibility.destroy({ where: { id: removables } });
 	},
