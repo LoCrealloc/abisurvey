@@ -4,6 +4,8 @@ import { randomBytes } from "crypto";
 import { User } from "$lib/server/models/user";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
+import { Answer } from "$lib/server/models/answer";
+import { PairAnswer } from "$lib/server/models/pairanswer";
 
 interface inPerson {
 	id?: number;
@@ -139,11 +141,13 @@ export const actions: Actions = {
 
 		const removables: Array<number> = [];
 
-		user_ids.forEach((number) => {
-			if (!processed.includes(number)) {
-				removables.push(number);
+		for (const id of user_ids) {
+			if (!processed.includes(id)) {
+				removables.push(id);
+				await Answer.destroy({ where: { userId: id } });
+				await PairAnswer.destroy({ where: { userId: id } });
 			}
-		});
+		}
 
 		await User.destroy({ where: { id: removables } });
 	},
