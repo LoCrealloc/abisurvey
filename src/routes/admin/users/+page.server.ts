@@ -7,6 +7,8 @@ import { Person } from "$lib/server/models/person";
 import { Answer } from "$lib/server/models/answer";
 import { PairAnswer } from "$lib/server/models/pairanswer";
 
+import { check_delete_person } from "$lib/server/utilities";
+
 interface inPerson {
 	id?: number;
 	forename: string;
@@ -18,7 +20,12 @@ interface inUser {
 	mail?: string;
 	gender?: "m" | "w" | "d";
 	code: string;
-	personId: number | null;
+	personId?: number;
+}
+
+interface fetchedUser {
+	id: number;
+	personId: number;
 }
 
 export const load: PageServerLoad = async ({ url }) => {
@@ -52,12 +59,12 @@ export const load: PageServerLoad = async ({ url }) => {
 export const actions: Actions = {
 	users: async ({ request }) => {
 		// fetch user ids to check what needs to be deleted later
-		const user_ids = (
+		const db_users: Array<fetchedUser> = (
 			await User.findAll({
-				attributes: ["id"],
+				attributes: ["id", "personId"],
 			})
 		).map((user) => {
-			return user.dataValues.id;
+			return user.dataValues;
 		});
 
 		const data = await request.formData();
@@ -66,7 +73,6 @@ export const actions: Actions = {
 
 		let current_user: inUser = {
 			id: undefined,
-			personId: null,
 			code: "",
 		};
 
@@ -111,7 +117,6 @@ export const actions: Actions = {
 
 				current_user = {
 					id: undefined,
-					personId: null,
 					code: "",
 				};
 
@@ -139,17 +144,16 @@ export const actions: Actions = {
 
 		await processEntry();
 
-		const removables: Array<number> = [];
-
-		for (const id of user_ids) {
+		for (const { id, personId } of db_users) {
 			if (!processed.includes(id)) {
-				removables.push(id);
 				await Answer.destroy({ where: { userId: id } });
 				await PairAnswer.destroy({ where: { userId: id } });
+
+				await User.destroy({ where: { id: id } });
+
+				await check_delete_person(personId);
 			}
 		}
-
-		await User.destroy({ where: { id: removables } });
 	},
 	generate: async () => {
 		const possibilities = (
