@@ -15,7 +15,7 @@ export class AnswerPossibility extends Model<
 > {
 	declare id: CreationOptional<number>;
 	declare isTeacher: boolean;
-	declare personId: ForeignKey<Person["id"]> | null;
+	declare personId: ForeignKey<Person["id"]>;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }

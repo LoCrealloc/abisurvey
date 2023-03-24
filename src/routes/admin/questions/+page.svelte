@@ -40,9 +40,14 @@
 	}
 
 	function remove_question(event, index: number) {
-		event.preventDefault();
-		questions.splice(index, 1);
-		questions = [...questions];
+		if (
+			confirm(
+				"Bist du dir sicher, dass du diese Frage löschen möchtest? Alle zusammenhängenden Antworten werden ebenfalls gelöscht",
+			)
+		) {
+			questions.splice(index, 1);
+			questions = [...questions];
+		}
 	}
 </script>
 
@@ -136,7 +141,7 @@
 					<div class="col-span-2 sm:col-span-1 sm:place-self-center">
 						<button
 							class="w-full rounded-xl bg-white p-3 text-slate-900"
-							on:click={(event) => remove_question(event, i)}>Entfernen</button
+							on:click|preventDefault={(event) => remove_question(event, i)}>Entfernen</button
 						>
 					</div>
 					{#if question.id}
