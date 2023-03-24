@@ -16,10 +16,16 @@
 	});
 
 	function remove_user(index: number) {
-		users.splice(index, 1);
-		users = [...users].sort((a, b) => {
-			return a.surname.localeCompare(b.surname);
-		});
+		if (
+			confirm(
+				"Bist du dir sicher, dass du diesen Nutzer löschen möchtest? Alle Antworten dieses Nutzers werden ebenfalls gelöscht",
+			)
+		) {
+			users.splice(index, 1);
+			users = [...users].sort((a, b) => {
+				return a.surname.localeCompare(b.surname);
+			});
+		}
 	}
 </script>
 

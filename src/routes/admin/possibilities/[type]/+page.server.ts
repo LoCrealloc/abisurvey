@@ -1,17 +1,28 @@
 import type { PageServerLoad, Actions } from "./$types";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
+import { Answer } from "$lib/server/models/answer";
+import { PairAnswer } from "$lib/server/models/pairanswer";
+
+import { Op } from "sequelize";
+
+import { check_delete_person } from "$lib/server/utilities";
 
 interface inPossibility {
 	id?: number;
 	isTeacher: boolean;
-	personId: number | null;
+	personId?: number;
 }
 
 interface inPerson {
 	id?: number;
 	forename: string;
 	surname: string;
+}
+
+interface fetchedPossibility {
+	id: number;
+	personId: number;
 }
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -46,15 +57,15 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	default: async ({ request, params }) => {
 		// fetch answer possibility ids to check what needs to be deleted later
-		const possibility_ids = (
+		const db_possibilities: Array<fetchedPossibility> = (
 			await AnswerPossibility.findAll({
-				attributes: ["id"],
+				attributes: ["id", "personId"],
 				where: {
 					isTeacher: params.type === "teacher",
 				},
 			})
 		).map((question) => {
-			return question.dataValues.id;
+			return question.dataValues;
 		});
 
 		const data = await request.formData();
@@ -62,7 +73,6 @@ export const actions: Actions = {
 		const processed: Array<number> = [];
 		let current_possibility: inPossibility = {
 			id: undefined,
-			personId: null,
 			isTeacher: params.type === "teacher",
 		};
 
@@ -113,7 +123,6 @@ export const actions: Actions = {
 
 				current_possibility = {
 					id: undefined,
-					personId: null,
 					isTeacher: params.type === "teacher",
 				};
 
@@ -129,14 +138,17 @@ export const actions: Actions = {
 
 		await processEntry();
 
-		const removables: Array<number> = [];
+		for (const { id, personId } of db_possibilities) {
+			if (!processed.includes(id)) {
+				await Answer.destroy({ where: { answerPossibilityId: id } });
+				await PairAnswer.destroy({
+					where: { [Op.or]: [{ answerOneId: id }, { answerTwoId: id }] },
+				});
 
-		possibility_ids.forEach((number) => {
-			if (!processed.includes(number)) {
-				removables.push(number);
+				await AnswerPossibility.destroy({ where: { id: id } });
+
+				await check_delete_person(personId);
 			}
-		});
-
-		await AnswerPossibility.destroy({ where: { id: removables } });
+		}
 	},
 };
