@@ -30,7 +30,6 @@ export async function check_delete_person(id: number) {
 		const possibility = await AnswerPossibility.findOne({ where: { personId: id } });
 
 		if (possibility === null) {
-			console.log(id);
 			await Person.destroy({ where: { id: id } });
 		}
 	}
