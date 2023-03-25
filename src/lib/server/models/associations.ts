@@ -7,6 +7,8 @@ import { User } from "./user";
 import { Attribute } from "./attribute";
 import { ProfileField } from "./profilefield";
 import { Picture } from "./picture";
+import { Quote } from "./quote";
+import { QuotePart } from "./quotepart";
 
 Person.hasOne(User, { foreignKey: "personId" });
 User.belongsTo(Person, { foreignKey: "personId" });
@@ -43,6 +45,15 @@ Attribute.belongsTo(User, { foreignKey: "userId" });
 
 User.hasOne(Picture, { foreignKey: "userId" });
 Picture.belongsTo(User, { foreignKey: "userId" });
+
+User.hasMany(Quote, { foreignKey: "userId" });
+Quote.belongsTo(User, { foreignKey: "userId" });
+
+Quote.hasMany(QuotePart, { foreignKey: "quoteId" });
+QuotePart.belongsTo(Quote, { foreignKey: "quoteId" });
+
+AnswerPossibility.hasMany(QuotePart, { foreignKey: "answerPossibilityId" });
+QuotePart.belongsTo(AnswerPossibility, { foreignKey: "answerPossibilityId" });
 
 export class X {
 	log() {
