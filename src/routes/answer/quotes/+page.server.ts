@@ -4,6 +4,19 @@ import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
 import { Quote } from "$lib/server/models/quote";
 import { QuotePart } from "$lib/server/models/quotepart";
+import { Op } from "sequelize";
+
+interface inQuote {
+	id?: number;
+	course?: string;
+}
+
+interface inQuotePart {
+	id?: number;
+	content?: string;
+	answerPossibilityId?: number;
+	quoteId?: number;
+}
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const possibilities = (
@@ -27,8 +40,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 		where: { userId: locals.userId },
 	});
 
-	console.log(quotes);
-
 	return {
 		possibilities: possibilities.map((row) => {
 			return {
@@ -41,9 +52,179 @@ export const load: PageServerLoad = async ({ locals }) => {
 				surname: row.Person.surname,
 			};
 		}),
+		quotes: quotes.map((quote) => {
+			return {
+				course: quote.course,
+				id: quote.id,
+				parts: quote.QuoteParts.map((part) => {
+					return {
+						id: part.id,
+						answerPossibilityId: part.answerPossibilityId,
+						content: part.content,
+					};
+				}),
+			};
+		}),
 	};
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals }) => {},
+	default: async ({ request, locals }) => {
+		const quote_ids: Array<number> = (
+			await Quote.findAll({ attributes: ["id"], where: { userId: locals.userId } })
+		).map((quote) => {
+			return quote.id;
+		});
+
+		const part_ids = (
+			await QuotePart.findAll({
+				attributes: ["id"],
+				where: {
+					quoteId: quote_ids.map((q) => {
+						return q.toString();
+					}),
+				},
+			})
+		).map((part) => {
+			return part.id;
+		});
+
+		const in_quotes: Array<number> = [];
+		const in_parts: Array<number> = [];
+
+		const data = await request.formData();
+
+		let current_quote: inQuote = {};
+		let current_part: inQuotePart = {};
+		let current_quote_parts: Array<inQuotePart> = [];
+
+		async function processQuote() {
+			if (current_quote_parts.length < 1) {
+				return; // TODO: throw errors
+			}
+
+			if (current_quote.course === undefined) {
+				return; // TODO: throw error
+			}
+
+			let quote: Quote;
+
+			if (current_quote.id !== null && current_quote.id !== undefined) {
+				// @ts-ignore
+				quote = await Quote.findOne({ where: { id: current_quote.id, userId: locals.userId } });
+
+				if (quote === null) {
+					return; // TODO: throw errors
+				}
+
+				await quote.update({ course: current_quote.course });
+
+				in_quotes.push(current_quote.id);
+			} else {
+				quote = await Quote.create({ course: current_quote.course, userId: locals.userId });
+			}
+
+			const creatable_parts: Array<inQuotePart> = [];
+
+			for (const part of current_quote_parts) {
+				if (part.id !== undefined && part.id !== null) {
+					const db_part = await QuotePart.findOne({ where: { id: part.id, quoteId: quote.id } });
+
+					if (db_part === null) {
+						return; // TODO: throw error
+					}
+
+					await db_part.update({
+						content: part.content,
+						answerPossibilityId: part.answerPossibilityId,
+					});
+
+					in_parts.push(part.id);
+				} else {
+					part.quoteId = quote.id;
+
+					if (part.content === undefined || part.answerPossibilityId === undefined) {
+						return; // TODO: throw error
+					}
+
+					creatable_parts.push(part);
+				}
+			}
+
+			// @ts-ignore
+			await QuotePart.bulkCreate(creatable_parts);
+
+			current_quote = {};
+			current_part = {};
+			current_quote_parts = [];
+		}
+
+		for (const pair of data.entries()) {
+			const key = pair[0];
+			const value = pair[1];
+
+			evaluate: {
+				switch (key) {
+					case "course":
+						if (
+							current_part.answerPossibilityId !== undefined &&
+							current_part.content !== undefined
+						) {
+							current_quote_parts.push(current_part);
+						}
+
+						await processQuote();
+
+						current_quote.course = value.toString();
+
+						break evaluate;
+
+					case "content":
+						if (
+							current_part.answerPossibilityId !== undefined &&
+							current_part.content !== undefined
+						) {
+							current_quote_parts.push(current_part);
+						}
+
+						current_part = {
+							content: value.toString(),
+						};
+
+						break evaluate;
+
+					case "possibility-id":
+						current_part.answerPossibilityId = parseInt(value.toString());
+						break evaluate;
+
+					case "part-id":
+						current_part.id = parseInt(value.toString());
+						break evaluate;
+
+					case "id":
+						current_quote.id = parseInt(value.toString());
+						break evaluate;
+				}
+			}
+		}
+
+		if (current_part.answerPossibilityId !== undefined && current_part.content !== undefined) {
+			current_quote_parts.push(current_part);
+		}
+
+		await processQuote();
+
+		for (const quoteId of quote_ids) {
+			if (!in_quotes.includes(quoteId)) {
+				await Quote.destroy({ where: { id: quoteId } });
+				await QuotePart.destroy({ where: { quoteId: quoteId } });
+			}
+		}
+
+		for (const partId of part_ids) {
+			if (!in_parts.includes(partId)) {
+				await QuotePart.destroy({ where: { id: partId } });
+			}
+		}
+	},
 };
