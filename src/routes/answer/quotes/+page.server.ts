@@ -1,10 +1,8 @@
-import type { PageServerLoad } from "./$types";
-import type { Actions } from "@sveltejs/kit";
 import { AnswerPossibility } from "$lib/server/models/answerpossibility";
+import type { PageServerLoad, Actions } from "./$types";
 import { Person } from "$lib/server/models/person";
 import { Quote } from "$lib/server/models/quote";
 import { QuotePart } from "$lib/server/models/quotepart";
-import { Op } from "sequelize";
 
 interface inQuote {
 	id?: number;
@@ -18,7 +16,7 @@ interface inQuotePart {
 	quoteId?: number;
 }
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = (async ({ locals }) => {
 	const possibilities = (
 		await AnswerPossibility.findAll({
 			include: Person,
@@ -33,10 +31,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 			{
 				model: QuotePart,
 				attributes: ["answerPossibilityId", "content", "id"],
-				order: ["id", "ASC"],
+				order: [["id", "ASC"]],
 			},
 		],
 		attributes: ["id", "course"],
+		order: [["id", "ASC"]],
 		where: { userId: locals.userId },
 	});
 
@@ -66,7 +65,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			};
 		}),
 	};
-};
+}) satisfies PageServerLoad;
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -227,4 +226,4 @@ export const actions: Actions = {
 			}
 		}
 	},
-};
+} satisfies Actions;
