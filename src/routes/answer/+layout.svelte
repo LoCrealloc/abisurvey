@@ -73,6 +73,9 @@
 			<div class="mb-4" transition:slide>
 				<a class="hover:text-white hover:underline" href="/answer/profiles">Steckbrief</a>
 			</div>
+			<div class="mb-4" transition:slide>
+				<a class="hover:text-white hover:underline" href="/answer/quotes">Zitate</a>
+			</div>
 		</div>
 	{/if}
 </nav>

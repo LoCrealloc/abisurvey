@@ -4,6 +4,8 @@
 	import type { Possibility } from "$lib/common_types";
 	import { scale } from "svelte/transition";
 
+	import { edited } from "$lib/client/stores/refresh";
+
 	export let data;
 
 	interface Quote {
@@ -43,6 +45,8 @@
 	let searchResults: Array<Possibility> = [];
 
 	function search(term: string) {
+		edited.set(true);
+
 		searchResults = order_possiblities(term, [...possibilities]).slice(0, 4);
 	}
 
