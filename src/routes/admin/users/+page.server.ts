@@ -6,6 +6,8 @@ import { AnswerPossibility } from "$lib/server/models/answerpossibility";
 import { Person } from "$lib/server/models/person";
 import { Answer } from "$lib/server/models/answer";
 import { PairAnswer } from "$lib/server/models/pairanswer";
+import { Quote } from "$lib/server/models/quote";
+import { QuotePart } from "$lib/server/models/quotepart";
 
 import { check_delete_person } from "$lib/server/utilities";
 
@@ -148,6 +150,14 @@ export const actions: Actions = {
 			if (!processed.includes(id)) {
 				await Answer.destroy({ where: { userId: id } });
 				await PairAnswer.destroy({ where: { userId: id } });
+
+				const belongingQuotes = (
+					await Quote.findAll({ where: { userId: id }, attributes: ["id"] })
+				).map((quote) => {
+					return quote.id;
+				});
+				await QuotePart.destroy({ where: { quoteId: belongingQuotes } });
+				await Quote.destroy({ where: { userId: id } });
 
 				await User.destroy({ where: { id: id } });
 
