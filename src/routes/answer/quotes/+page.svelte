@@ -73,6 +73,8 @@
 	}
 
 	function addQuote() {
+		new_quote.parts = new_lines;
+
 		quotes.push(new_quote);
 
 		new_lines = [{ content: "" }];
@@ -113,6 +115,7 @@
 		>
 			<legend class="mx-5 w-72 text-left text-slate-900 md:w-96"
 				><input
+					maxlength="20"
 					required
 					type="text"
 					placeholder="Kurs.."
@@ -127,6 +130,7 @@
 					>
 						<div class="col-span-3 w-full place-self-center sm:col-span-3">
 							<input
+								maxlength="100"
 								required
 								class="w-full rounded-lg p-3 text-black"
 								value={line.content}
@@ -216,136 +220,142 @@
 		</fieldset>
 	</form>
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Eingereichte Zitate</h2>
-	<form
-		method="POST"
-		on:submit={() => {
-			actionCall.set(true);
-		}}
-	>
-		{#each quotes as quote, i}
-			<fieldset
-				class="mt-2 rounded-xl border-4 border-solid border-slate-900 bg-slate-500 dark:bg-sky-700"
-			>
-				<legend class="mx-5 w-72 text-left text-slate-900 md:w-96"
-					><input
-						required
-						type="text"
-						placeholder="Kurs.."
-						bind:value={quote.course}
-						name="course"
-						class="h-full w-full rounded-xl border-2 border-solid border-slate-900 p-2"
-					/></legend
+	{#if quotes.length > 0}
+		<form
+			method="POST"
+			on:submit={() => {
+				actionCall.set(true);
+			}}
+		>
+			{#each quotes as quote, i}
+				<fieldset
+					class="mt-2 rounded-xl border-4 border-solid border-slate-900 bg-slate-500 dark:bg-sky-700"
 				>
-				<div class="mt-2">
-					{#each quote.parts as part, j}
-						<div
-							class="mx-1 mb-1 grid grid-cols-3 grid-rows-2 place-items-stretch gap-2 rounded-lg bg-slate-600 p-3 sm:grid-cols-6 sm:grid-rows-1"
-						>
-							<div class="col-span-3 w-full place-self-center sm:col-span-3">
-								<input
-									required
-									type="text"
-									name="content"
-									value={part.content}
-									class="w-full rounded-lg p-3"
-								/>
-							</div>
-							<div class="relative col-span-2 w-full place-self-center sm:col-span-2">
-								<input
-									required
-									class="w-full rounded p-3 text-black"
-									on:focusin={(event) => {
-										current = `${i}-${j}`;
-										search(event.target.value);
-									}}
-									on:focusout={(event) => {
-										current = null;
-										if (part.answerPossibilityId !== undefined) {
-											event.target.value = getNameFor(part.answerPossibilityId);
-										} else {
-											event.target.value = "";
-										}
-									}}
-									on:input|preventDefault={(event) => search(event.target.value)}
-									value={part.answerPossibilityId !== undefined
-										? getNameFor(part.answerPossibilityId)
-										: ""}
-								/>
-								{#if part.answerPossibilityId !== undefined}
+					<legend class="mx-5 w-72 text-left text-slate-900 md:w-96"
+						><input
+							maxlength="20"
+							required
+							type="text"
+							placeholder="Kurs.."
+							bind:value={quote.course}
+							name="course"
+							class="h-full w-full rounded-xl border-2 border-solid border-slate-900 p-2"
+						/></legend
+					>
+					<div class="mt-2">
+						{#each quote.parts as part, j}
+							<div
+								class="mx-1 mb-1 grid grid-cols-3 grid-rows-2 place-items-stretch gap-2 rounded-lg bg-slate-600 p-3 sm:grid-cols-6 sm:grid-rows-1"
+							>
+								<div class="col-span-3 w-full place-self-center sm:col-span-3">
 									<input
+										maxlength="100"
+										required
 										type="text"
-										value={part.answerPossibilityId}
-										hidden
-										name="possibility-id"
+										name="content"
+										value={part.content}
+										class="w-full rounded-lg p-3"
 									/>
-								{/if}
-								{#if current === `${i}-${j}`}
-									<div
-										transition:scale
-										class="absolute z-10 w-fit rounded-xl rounded-t-none border-2 border-solid border-slate-900 bg-white"
+								</div>
+								<div class="relative col-span-2 w-full place-self-center sm:col-span-2">
+									<input
+										required
+										class="w-full rounded p-3 text-black"
+										on:focusin={(event) => {
+											current = `${i}-${j}`;
+											search(event.target.value);
+										}}
+										on:focusout={(event) => {
+											current = null;
+											if (part.answerPossibilityId !== undefined) {
+												event.target.value = getNameFor(part.answerPossibilityId);
+											} else {
+												event.target.value = "";
+											}
+										}}
+										on:input|preventDefault={(event) => search(event.target.value)}
+										value={part.answerPossibilityId !== undefined
+											? getNameFor(part.answerPossibilityId)
+											: ""}
+									/>
+									{#if part.answerPossibilityId !== undefined}
+										<input
+											type="text"
+											value={part.answerPossibilityId}
+											hidden
+											name="possibility-id"
+										/>
+									{/if}
+									{#if current === `${i}-${j}`}
+										<div
+											transition:scale
+											class="absolute z-10 w-fit rounded-xl rounded-t-none border-2 border-solid border-slate-900 bg-white"
+										>
+											{#each searchResults as possibility}
+												<button
+													class="w-full border-b-2 p-1.5 text-left text-lg hover:bg-slate-500"
+													on:click={(event) => {
+														event.preventDefault();
+													}}
+													on:mousedown={() => {
+														part.answerPossibilityId = possibility.id;
+													}}
+												>
+													{`${possibility.forename} ${possibility.surname}`}
+												</button>
+												<br />
+											{/each}
+										</div>
+									{/if}
+								</div>
+								<div class="col-span-1 w-full place-self-center">
+									<button
+										class="w-full rounded-xl bg-white p-3 hover:bg-red-600"
+										on:click|preventDefault={() => {
+											removePart(i, j);
+										}}
 									>
-										{#each searchResults as possibility}
-											<button
-												class="w-full border-b-2 p-1.5 text-left text-lg hover:bg-slate-500"
-												on:click={(event) => {
-													event.preventDefault();
-												}}
-												on:mousedown={() => {
-													part.answerPossibilityId = possibility.id;
-												}}
-											>
-												{`${possibility.forename} ${possibility.surname}`}
-											</button>
-											<br />
-										{/each}
-									</div>
-								{/if}
+										Löschen
+									</button>
+								</div>
 							</div>
-							<div class="col-span-1 w-full place-self-center">
-								<button
-									class="w-full rounded-xl bg-white p-3 hover:bg-red-600"
-									on:click|preventDefault={() => {
-										removePart(i, j);
-									}}
-								>
-									Löschen
-								</button>
-							</div>
+							{#if part.id !== undefined}
+								<input hidden type="text" name="part-id" value={part.id} />
+							{/if}
+						{/each}
+					</div>
+					<div class="grid gap-4 p-3">
+						<div class="w-full">
+							<button
+								class="w-full rounded-xl bg-white p-3 hover:bg-sky-600 dark:hover:bg-slate-500"
+								on:click|preventDefault={() => {
+									addPart(i);
+								}}
+							>
+								Neue Zeile
+							</button>
 						</div>
-						{#if part.id !== undefined}
-							<input hidden type="text" name="part-id" value={part.id} />
-						{/if}
-					{/each}
-				</div>
-				<div class="grid gap-4 p-3">
-					<div class="w-full">
-						<button
-							class="w-full rounded-xl bg-white p-3 hover:bg-sky-600 dark:hover:bg-slate-500"
-							on:click|preventDefault={() => {
-								addPart(i);
-							}}
-						>
-							Neue Zeile
-						</button>
+						<div>
+							<input
+								on:click|preventDefault={() => removeQuote(i)}
+								type="submit"
+								class="w-full cursor-pointer rounded-xl bg-white p-3 hover:bg-red-600"
+								value="Löschen"
+							/>
+						</div>
 					</div>
-					<div>
-						<input
-							on:click|preventDefault={() => removeQuote(i)}
-							type="submit"
-							class="w-full cursor-pointer rounded-xl bg-white p-3 hover:bg-red-600"
-							value="Löschen"
-						/>
-					</div>
-				</div>
-				{#if quote.id !== undefined}
-					<input hidden type="text" name="id" value={quote.id} />
-				{/if}
-			</fieldset>
-		{/each}
-		<input
-			class="mt-8 w-full cursor-pointer rounded-xl bg-slate-500 p-4 text-lg text-white hover:bg-sky-700 hover:bg-sky-600 dark:bg-sky-700 dark:hover:bg-slate-500"
-			type="submit"
-			value="Absenden"
-		/>
-	</form>
+					{#if quote.id !== undefined}
+						<input hidden type="text" name="id" value={quote.id} />
+					{/if}
+				</fieldset>
+			{/each}
+			<input
+				class="mt-8 w-full cursor-pointer rounded-xl bg-slate-500 p-4 text-lg text-white hover:bg-sky-700 hover:bg-sky-600 dark:bg-sky-700 dark:hover:bg-slate-500"
+				type="submit"
+				value="Absenden"
+			/>
+		</form>
+	{:else}
+		<h1 class="m-8 text-center dark:text-white">Du hast noch keine Zitate eingereicht!</h1>
+	{/if}
 </div>

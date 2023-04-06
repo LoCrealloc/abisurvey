@@ -3,6 +3,7 @@ import type { PageServerLoad, Actions } from "./$types";
 import { Person } from "$lib/server/models/person";
 import { Quote } from "$lib/server/models/quote";
 import { QuotePart } from "$lib/server/models/quotepart";
+import { error } from "@sveltejs/kit";
 
 interface inQuote {
 	id?: number;
@@ -100,11 +101,13 @@ export const actions: Actions = {
 
 		async function processQuote() {
 			if (current_quote_parts.length < 1) {
-				return; // TODO: throw errors
+				throw error(400, { message: "Bad input: quote parts missing" });
 			}
 
 			if (current_quote.course === undefined) {
-				return; // TODO: throw error
+				throw error(400, { message: "Bad input: quote course missing" });
+			} else if (current_quote.course.length > 20) {
+				throw error(400, { message: "Bad input: quote course too long (max 20 characters)" });
 			}
 
 			let quote: Quote;
@@ -114,7 +117,7 @@ export const actions: Actions = {
 				quote = await Quote.findOne({ where: { id: current_quote.id, userId: locals.userId } });
 
 				if (quote === null) {
-					return; // TODO: throw errors
+					throw error(400, { message: "Bad input: no quote with this id could be found" });
 				}
 
 				await quote.update({ course: current_quote.course });
@@ -131,7 +134,7 @@ export const actions: Actions = {
 					const db_part = await QuotePart.findOne({ where: { id: part.id, quoteId: quote.id } });
 
 					if (db_part === null) {
-						return; // TODO: throw error
+						throw error(400, { message: "Bad input: no part with this id could be found" });
 					}
 
 					await db_part.update({
@@ -144,7 +147,13 @@ export const actions: Actions = {
 					part.quoteId = quote.id;
 
 					if (part.content === undefined || part.answerPossibilityId === undefined) {
-						return; // TODO: throw error
+						throw error(400, {
+							message: "Bad input: missing content or possibility for quote part",
+						});
+					} else if (part.content.length > 100) {
+						throw error(400, {
+							message: "Bad input: part content too long (max 100 characters)",
+						});
 					}
 
 					creatable_parts.push(part);
