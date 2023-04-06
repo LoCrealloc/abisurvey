@@ -182,7 +182,9 @@ export const actions: Actions = {
 							current_quote_parts.push(current_part);
 						}
 
-						await processQuote();
+						if (Object.keys(current_quote).length > 0) {
+							await processQuote();
+						}
 
 						current_quote.course = value.toString();
 
