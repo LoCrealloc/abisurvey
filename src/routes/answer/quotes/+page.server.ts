@@ -53,7 +53,6 @@ export const load: PageServerLoad = (async ({ locals }) => {
 			};
 		}),
 		quotes: quotes.map((quote) => {
-			console.log(quote.QuoteParts);
 			return {
 				course: quote.course,
 				id: quote.id,

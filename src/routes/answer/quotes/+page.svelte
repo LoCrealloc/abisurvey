@@ -30,8 +30,6 @@
 		possibilities = data.possibilities;
 
 		quotes = data.quotes;
-
-		console.log(quotes);
 	});
 
 	let quotes: Array<Quote> = [];
