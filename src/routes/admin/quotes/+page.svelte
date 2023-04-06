@@ -57,7 +57,7 @@
 				<div class="mt-2">
 					{#each quote.parts as part}
 						<div
-							class="mx-1 mb-1 grid grid-cols-3 grid-rows-2 place-items-stretch gap-2 rounded-lg bg-slate-600 p-3 sm:grid-cols-4 sm:grid-rows-1"
+							class="mx-1 mb-1 grid grid-cols-1 grid-rows-2 place-items-stretch gap-2 rounded-lg bg-slate-600 p-3 sm:grid-cols-4 sm:grid-rows-1"
 						>
 							<div class="col-span-1 w-full place-self-center sm:col-span-3">
 								<input readonly type="text" value={part.content} class="w-full rounded-lg p-3" />
