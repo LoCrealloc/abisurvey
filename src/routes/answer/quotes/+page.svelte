@@ -4,7 +4,7 @@
 	import type { Possibility } from "$lib/common_types";
 	import { scale } from "svelte/transition";
 
-	import { edited } from "$lib/client/stores/refresh";
+	import { edited, actionCall } from "$lib/client/stores/refresh";
 
 	export let data;
 
@@ -30,6 +30,8 @@
 		possibilities = data.possibilities;
 
 		quotes = data.quotes;
+
+		console.log(quotes);
 	});
 
 	let quotes: Array<Quote> = [];
@@ -216,7 +218,12 @@
 		</fieldset>
 	</form>
 	<h2 class="mt-8 mb-3 text-2xl dark:text-white">Eingereichte Zitate</h2>
-	<form method="POST">
+	<form
+		method="POST"
+		on:submit={() => {
+			actionCall.set(true);
+		}}
+	>
 		{#each quotes as quote, i}
 			<fieldset
 				class="mt-2 rounded-xl border-4 border-solid border-slate-900 bg-slate-500 dark:bg-sky-700"

@@ -20,6 +20,7 @@ export const load: PageServerLoad = (async () => {
 			{
 				model: QuotePart,
 				attributes: ["answerPossibilityId", "content", "id"],
+				separate: true,
 				order: [["id", "ASC"]],
 			},
 			{
