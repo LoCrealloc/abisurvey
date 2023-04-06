@@ -148,6 +148,11 @@
 					href="/admin/profileresults"
 					transition:slide>Steckbriefergebnisse</a
 				>
+				<a
+					class="m-1 hover:text-sky-500 hover:underline sm:p-2"
+					href="/admin/quotes"
+					transition:slide>Zitate</a
+				>
 			</div>
 		{/if}
 		<div class="m-4 ml-auto rounded-full bg-slate-900 p-4 text-white">
