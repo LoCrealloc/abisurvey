@@ -101,8 +101,10 @@
 	function removePart(quoteIndex: number, partIndex: number) {
 		if (quotes[quoteIndex].parts.length > 1) {
 			quotes[quoteIndex].parts.splice(partIndex, 1);
-			quotes = [...quotes];
+		} else {
+			quotes.splice(quoteIndex, 1);
 		}
+		quotes = [...quotes];
 	}
 </script>
 
