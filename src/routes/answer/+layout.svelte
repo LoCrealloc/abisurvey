@@ -7,7 +7,6 @@
 	import { env } from "$env/dynamic/public";
 
 	const IMAGE_UPLOAD_URL = env.PUBLIC_IMAGE_UPLOAD_LINK;
-	console.log(IMAGE_UPLOAD_URL);
 
 	let show = false;
 	let askConfirm = false;
