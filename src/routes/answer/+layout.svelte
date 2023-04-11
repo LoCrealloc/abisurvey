@@ -4,6 +4,11 @@
 
 	import { edited, actionCall } from "$lib/client/stores/refresh";
 
+	import { env } from "$env/dynamic/public";
+
+	const IMAGE_UPLOAD_URL = env.PUBLIC_IMAGE_UPLOAD_LINK;
+	console.log(IMAGE_UPLOAD_URL);
+
 	let show = false;
 	let askConfirm = false;
 	let isAction = false;
@@ -76,6 +81,11 @@
 			<div class="mb-4" transition:slide>
 				<a class="hover:text-white hover:underline" href="/answer/quotes">Zitate</a>
 			</div>
+			{#if IMAGE_UPLOAD_URL}
+				<div class="mb-4" transition:slide>
+					<a class="hover:text-white hover:underline" href={IMAGE_UPLOAD_URL}>Bildupload</a>
+				</div>
+			{/if}
 		</div>
 	{/if}
 </nav>
