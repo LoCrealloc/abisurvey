@@ -15,7 +15,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
 	declare gender?: gender;
 	declare mail?: string;
 	declare code: string;
-	declare personId: ForeignKey<Person["id"]> | null;
+	declare personId: ForeignKey<Person["id"]>;
 
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;

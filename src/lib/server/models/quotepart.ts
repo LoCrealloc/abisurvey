@@ -6,33 +6,34 @@ import type {
 	ForeignKey,
 } from "sequelize";
 import { db } from "../database";
+import type { AnswerPossibility } from "./answerpossibility";
+import type { Quote } from "./quote";
 
-import type { Person } from "./person";
-
-export class AnswerPossibility extends Model<
-	InferAttributes<AnswerPossibility>,
-	InferCreationAttributes<AnswerPossibility>
+export class QuotePart extends Model<
+	InferAttributes<QuotePart>,
+	InferCreationAttributes<QuotePart>
 > {
 	declare id: CreationOptional<number>;
-	declare isTeacher: boolean;
-	declare personId: ForeignKey<Person["id"]>;
+	declare content: string;
+	declare answerPossibilityId: ForeignKey<AnswerPossibility["id"]>;
+	declare quoteId: ForeignKey<Quote["id"]>;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 }
 
-AnswerPossibility.init(
+QuotePart.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		isTeacher: DataTypes.BOOLEAN,
+		content: DataTypes.TEXT,
 		createdAt: DataTypes.DATE,
 		updatedAt: DataTypes.DATE,
 	},
 	{
 		sequelize: db,
-		tableName: "answerpossibilities",
+		tableName: "quoteparts",
 	},
 );

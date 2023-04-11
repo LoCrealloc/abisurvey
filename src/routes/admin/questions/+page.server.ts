@@ -1,5 +1,7 @@
 import type { PageServerLoad } from "./$types";
 import { Question } from "$lib/server/models/question";
+import { Answer } from "$lib/server/models/answer";
+import { PairAnswer } from "$lib/server/models/pairanswer";
 
 interface inQuestion {
 	question: string;
@@ -93,14 +95,12 @@ export const actions: Actions = {
 			await Question.update(question, { where: { id: question.id } });
 		}
 
-		const removables: Array<number> = [];
-
-		question_ids.forEach((number) => {
-			if (!in_ids.includes(number)) {
-				removables.push(number);
+		for (const id of question_ids) {
+			if (!in_ids.includes(id)) {
+				await Answer.destroy({ where: { questionId: id } });
+				await PairAnswer.destroy({ where: { questionId: id } });
+				await Question.destroy({ where: { id: id } });
 			}
-		});
-
-		await Question.destroy({ where: { id: removables } });
+		}
 	},
 };

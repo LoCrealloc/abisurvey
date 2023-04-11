@@ -32,8 +32,14 @@
 	}
 
 	function remove_possibility(index: number) {
-		possibilities.splice(index, 1);
-		possibilities = [...possibilities];
+		if (
+			confirm(
+				"Bist du dir sicher, dass du diese Antwortmöglichkeit löschen möchtest? Alle zusammenhängenden Antworten werden ebenfalls gelöscht",
+			)
+		) {
+			possibilities.splice(index, 1);
+			possibilities = [...possibilities];
+		}
 	}
 </script>
 

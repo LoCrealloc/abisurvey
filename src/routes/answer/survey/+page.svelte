@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { distance } from "fastest-levenshtein";
 
 	import { scale } from "svelte/transition";
 
 	import { edited, actionCall } from "$lib/client/stores/refresh";
+
+	import { order_possiblities } from "$lib/client/utils";
 
 	interface Possibility {
 		forename: string;
@@ -148,45 +149,7 @@
 			});
 		}
 
-		term = term.toLowerCase();
-
-		searchables.sort((p1, p2) => {
-			// the name parts to test the term against
-			let tests1 = [
-				p1.forename.toLowerCase(),
-				p1.surname.toLowerCase(),
-				`${p1.forename} ${p1.surname}`.toLowerCase(),
-			];
-			let tests2 = [
-				p2.forename.toLowerCase(),
-				p2.surname.toLowerCase(),
-				`${p2.forename} ${p2.surname}`.toLowerCase(),
-			];
-
-			let smallest = [{}, Number.MAX_VALUE];
-
-			[
-				[p1, tests1],
-				[p2, tests2],
-			].forEach((possibility) => {
-				possibility[1].forEach((test) => {
-					const calculated_distance = distance(test, term);
-
-					if (calculated_distance < smallest[1]) {
-						smallest[0] = possibility[0];
-						smallest[1] = calculated_distance;
-					}
-				});
-			});
-
-			if (smallest[0] === p1) {
-				return -1;
-			} else {
-				return 1;
-			}
-		});
-
-		searchResults = searchables.slice(0, 4);
+		searchResults = order_possiblities(term, searchables).slice(0, 4);
 	}
 
 	function getAnswerForId(obj: Record<string, Answer>, id: number): string {
