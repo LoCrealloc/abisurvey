@@ -102,7 +102,7 @@
 	afterNavigate(loadCallback);
 </script>
 
-<div class="m-5">
+<div class="relative m-5">
 	<h1 class="mb-7 text-5xl dark:text-white">
 		Ergebnisse |
 		{#if type === "student"}
@@ -111,7 +111,7 @@
 			Lehrer
 		{/if}
 	</h1>
-	<div class="flex w-full justify-center">
+	<div class="sticky top-0 z-20 flex w-full justify-center bg-white bg-white p-3 p-3">
 		<input
 			class="range-lg mx-72 my-4 w-full cursor-pointer text-white"
 			type="range"
