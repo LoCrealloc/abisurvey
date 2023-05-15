@@ -28,6 +28,8 @@
 	let ls_results: Array<Answer> = [];
 	let type = "";
 
+	let result_count = 10;
+
 	function loadCallback() {
 		type = data.type;
 
@@ -65,11 +67,42 @@
 		ls_results = [...Object.values(obj_results)];
 	}
 
+	function limit_results() {
+		if (result_count == 10) {
+			ls_results = [...Object.values(obj_results)];
+			return;
+		}
+
+		const new_results = [];
+
+		[...Object.values(obj_results)].forEach((question) => {
+			const new_question = structuredClone(question);
+			const all_nums = [];
+
+			question.results.forEach((result) => {
+				if (!all_nums.includes(result.count)) {
+					all_nums.push(result.count);
+				}
+			});
+
+			all_nums.sort().reverse();
+
+			const top = all_nums.slice(0, result_count);
+			new_question.results = question.results.filter((result) => {
+				return top.includes(result.count);
+			});
+
+			new_results.push(new_question);
+		});
+
+		ls_results = [...new_results];
+	}
+
 	onMount(loadCallback);
 	afterNavigate(loadCallback);
 </script>
 
-<div class="m-5">
+<div class="relative m-5">
 	<h1 class="mb-7 text-5xl dark:text-white">
 		Ergebnisse |
 		{#if type === "student"}
@@ -78,6 +111,18 @@
 			Lehrer
 		{/if}
 	</h1>
+	<div class="sticky top-0 z-20 flex w-full justify-center bg-white bg-white p-3 p-3">
+		<input
+			class="range-lg mx-72 my-4 w-full cursor-pointer text-white"
+			type="range"
+			min="1"
+			max="10"
+			bind:value={result_count}
+			on:change={() => {
+				limit_results();
+			}}
+		/>
+	</div>
 	<div class="flex flex-row flex-wrap justify-center">
 		{#each ls_results as { question, results }}
 			<div class="m-2 md:w-4/6 2xl:w-2/6 3xl:w-1/6">
