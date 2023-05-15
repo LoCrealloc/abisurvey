@@ -85,9 +85,12 @@
 				}
 			});
 
-			all_nums.sort().reverse();
+			all_nums.sort((a, b) => {
+				return a - b;
+			});
 
-			const top = all_nums.slice(0, result_count);
+			const top = all_nums.reverse().slice(0, result_count);
+
 			new_question.results = question.results.filter((result) => {
 				return top.includes(result.count);
 			});
