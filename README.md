@@ -16,7 +16,7 @@ Since I started this project, my team decided that I should also implement some 
 ### Using docker
 
 The easiest way to run this project is to use the `docker-compose.yml` file located in this repository. It provides you the latest stable version of this project as well as a postgres database that this project relies on.
-In order to run the project, you will also have to set a few environment variables, which are explained later in this document. The easiest way is to just download or copy the example `abisite.env` file in this repository. After you downloaded both files, adjust the environment variables and the `docker-compose.yml` file to your needs and make sure you have Docker installed. You can then run the compose project with 
+In order to run the project, you will also have to set a few environment variables, which are explained later in this document. The easiest way is to just download or copy the example `abisite.env` file in this repository. After you downloaded both files, adjust the environment variables and the `docker-compose.yml` file to your needs and make sure you have Docker installed. You can then run the compose project with
 
 ```
 docker compose up -d
@@ -33,6 +33,7 @@ cd abisurvey
 ```
 
 After that, you will have to install the project dependencies. Make sure you have Node and NPM installed.
+
 ```
 npm install
 ```
@@ -45,6 +46,7 @@ vim .env
 ```
 
 Once you have your database running and adjusted the environment file, you can run the website in a development environment using
+
 ```
 npm run dev
 ```
@@ -52,7 +54,7 @@ npm run dev
 ## Environment variables
 
 | **Variable**             | **Explanation**                                                                                           | **Example**                |
-|--------------------------|-----------------------------------------------------------------------------------------------------------|----------------------------|
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | -------------------------- |
 | DB_HOST                  | The IP address or hostname where the app can find the postgres database                                   | localhost                  |
 | DB_PORT                  | The port the database is listening on                                                                     | 5432                       |
 | DB_USER                  | The database user                                                                                         | abisurvey                  |

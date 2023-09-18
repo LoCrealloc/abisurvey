@@ -64,7 +64,6 @@ export const actions: Actions = {
 	default: async ({ request, locals }) => {
 		const data = await request.formData();
 
-		let current_answer: number | undefined;
 		let current_possibility: number | undefined;
 		let current_possibility_two: number | undefined;
 
@@ -76,7 +75,11 @@ export const actions: Actions = {
 			const question = await Question.findOne({ where: { id: id } });
 
 			if (question !== null && !question.pair) {
-				if (current_answer === undefined) {
+				const current_answer = await Answer.findOne({
+					where: { questionId: id, userId: locals.userId },
+				});
+
+				if (current_answer === null) {
 					await Answer.create({
 						questionId: id,
 						answerPossibilityId: current_possibility,
@@ -85,7 +88,7 @@ export const actions: Actions = {
 				} else {
 					await Answer.update(
 						{ answerPossibilityId: current_possibility },
-						{ where: { id: current_answer, userId: locals.userId } },
+						{ where: { id: current_answer.id, userId: locals.userId } },
 					);
 				}
 			} else {
@@ -99,7 +102,11 @@ export const actions: Actions = {
 							answerTwoId: current_possibility,
 					  };
 
-				if (current_answer === undefined) {
+				const current_answer = await PairAnswer.findOne({
+					where: { questionId: id, userId: locals.userId },
+				});
+
+				if (current_answer === null) {
 					if (current_possibility === current_possibility_two) {
 						return;
 					}
@@ -115,7 +122,7 @@ export const actions: Actions = {
 					);
 				} else {
 					await PairAnswer.update(order, {
-						where: { id: current_answer, userId: locals.userId },
+						where: { id: current_answer.id, userId: locals.userId },
 					});
 				}
 			}
@@ -128,11 +135,8 @@ export const actions: Actions = {
 			if (key === "questionId") {
 				await processEntry(parseInt(value.toString()));
 
-				current_answer = undefined;
 				current_possibility = undefined;
 				current_possibility_two = undefined;
-			} else if (key === "answerId") {
-				current_answer = parseInt(value.toString());
 			} else if (key === "answerPossibilityId" || key === "answerOneId") {
 				current_possibility = parseInt(value.toString());
 			} else if (key === "answerTwoId") {
